@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,11 +19,11 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/sweetalert/sweetalert.css') }} ../css/sweetalert.css" type="text/css">
-    <link href="../sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
-
+    <link rel="stylesheet" href="{{ asset('assets/sweetalert/sweetalert.css') }}" type="text/css">
+    <link href="{{ asset('assets/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
     <!-- Custom styles for this page -->
-    <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    @stack('style')
 
 </head>
 
@@ -30,78 +31,23 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
-
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon">
-
-                </div>
+                <div class="sidebar-brand-icon"></div>
                 <div class="sidebar-brand-text mx-3">SILMI FASHION <sup>PAYROLL</sup></div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-            <?php
-
-            if($_GET['halaman'] == 'penjahit'){
-
-            ?>
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="<?= base_url() ?>/dashboard/index.php?halaman=penjahit">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/gajipenjahit/namapenjahit/index.php">
-                    <i class="fas fa-users"></i>
-                    <span>Data Nama Penjahit</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/gajipenjahit/produk/index.php">
-                    <i class="fas fa-tshirt"></i>
-                    <span>Data Nama Produk</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/gajipenjahit/kebutuhan/index.php">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Data Kebutuhan Lainnya</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/gajipenjahit/hasiljahitan/index.php">
-                    <i class="fas fa-tags"></i>
-                    <span>Data Hasil Jahitan</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/gajipenjahit/takehome/index.php">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span>Take Home</span></a>
-            </li>
-
-
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/gajipenjahit/laporan/index.php">
-                    <i class="fas fa-list-alt"></i>
-                    <span>Laporan Jahitan</span></a>
-            </li>
-
-            <?php
-            }else{
-            ?>
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="<?= base_url() ?>/dashboard/index.php?halaman=karyawan">
+                <a class="nav-link" href="{{ url()->to('/gaji-pegawai/dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -113,10 +59,10 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded ">
-                        <a class="collapse-item" href="<?= base_url() ?>/data_master/data_user/index.php">Data User</a>
-                        <a class="collapse-item" href="<?= base_url() ?>/data_master/data_direksi/index.php">Data
+                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/data-master/users') }}">Data User</a>
+                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/data-master/direksi') }}">Data
                             Direksi</a>
-                        <a class="collapse-item" href="<?= base_url() ?>/data_master/data_karyawan/index.php">Data
+                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/data-master/karyawan') }}">Data
                             Karyawan</a>
                     </div>
                 </div>
@@ -133,45 +79,55 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-sales') }}">Lembur
+                            (SALES)
+                        </a>
                         <a class="collapse-item"
-                            href="<?= base_url() ?>/master_tunjangan/lemburperjam/index.php">Lembur (SALES)</a>
-                        <a class="collapse-item"
-                            href="<?= base_url() ?>/master_tunjangan/lemburrewardcicilan/index.php">Lembur Reward
-                            Cicilan</a>
+                            href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-reward-cicilan') }}">Lembur Reward
+                            Cicilan
+                        </a>
 
                         <a class="collapse-item"
-                            href="<?= base_url() ?>/master_tunjangan/tunjangan_tetap/index.php">Tunjangan</a>
+                            href="{{ url()->to('/gaji-pegawai/tunjangan/tetap') }}">Tunjangan Tetap
+                        </a>
+                        <a class="collapse-item"
+                            href="{{ url()->to('/gaji-pegawai/tunjangan/tidak-tetap') }}">Tunjangan Tidak Tetap
+                        </a>
                     </div>
                 </div>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/kartucicilan/index.php">
+                <a class="nav-link" href="{{ url()->to('/gaji-pegawai/kartu-cicilan') }}">
                     <i class="fas fa-credit-card"></i>
-                    <span>Kartu Cicilan</span></a>
+                    <span>Kartu Cicilan</span>
+                </a>
             </li>
 
             <!-- Nav Item - Charts -->
 
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/gaji/index.php">
+                <a class="nav-link" href="{{ url()->to('/gaji-pegawai/gaji') }}">
 
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Take Home</span></a>
+                    <span>Take Home</span>
+                </a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/akumulasi/index.php">
+                <a class="nav-link" href="{{ url()->to('/gaji-pegawai/akumulasi-gaji') }}">
                     <i class="fas fa-coins"></i>
-                    <span>Akumulasi</span></a>
+                    <span>Akumulasi</span>
+                </a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>/laporan/index.php">
+                <a class="nav-link" href="{{ url()->to('/gaji-pegawai/laporan') }}">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Laporan</span></a>
+                    <span>Laporan</span>
+                </a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -179,10 +135,6 @@
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-            <?php
-            }
-
-            ?>
         </ul>
 
 
