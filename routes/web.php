@@ -26,37 +26,37 @@ Route::get('/home', function() {
 });
 Route::prefix('/gaji-pegawai')->group(function () {
     Route::get('/dashboard', function() {
-        return 'Dashboard';
+        return view('gaji-pegawai.dashboard.index');
     });
     Route::prefix('/data-master')->group(function () {
         Route::get('users', function () {
-            return 'User';
+            return view('gaji-pegawai.user.index');
         });
         Route::get('users/{id}/change-password', function ($id) {
             return "User $id ganti password";
         });
 
         Route::get('direksi', function () {
-            return 'Direksi';
+            return view('gaji-pegawai.direksi.index');
         });
         Route::get('direksi/add', function () {
             return 'Direksi tambah';
         });
         Route::get('direksi/{id}/edit', function ($id) {
-            return 'Direksi ' . $id . ' Edit';
+            return view('gaji-pegawai.direksi.edit');
         });
         Route::get('direksi/{id}/remove', function ($id) {
             return "Direksi $id hapus";
         });
         
         Route::get('karyawan', function () {
-            return 'Karyawan';
+            return view('gaji-pegawai.karyawan.index');
         });
         Route::get('karyawan/add', function () {
             return 'Tambah Karyawan';
         });
         Route::get('karyawan/{id}/edit', function ($id) {
-            return "Karyawan $id edit";
+            return view('gaji-pegawai.karyawan.edit');
         });
         Route::get('karyawan/{id}/remove', function ($id) {
             return "Karyawan $id hapus";
@@ -70,27 +70,27 @@ Route::prefix('/gaji-pegawai')->group(function () {
     });
     Route::prefix('/tunjangan')->group(function () {
         Route::get('lembur-sales', function () {
-            return 'Lembur Sales';
+            return view('gaji-pegawai.lembur-per-jam.index');
         });
         Route::get('lembur-sales/add', function () {
             return 'Lembur Sales tambah';
         });
         Route::get('lembur-sales/{id}/edit', function ($id) {
-            return 'Lembur Sales '.$id.' ubah';
+            return view('gaji-pegawai.lembur-per-jam.edit');
         });
         Route::get('lembur-sales/{id}/remove', function ($id) {
             return 'Lembur Sales '.$id.' hapus';
         });
         Route::get('lembur-reward-cicilan', function () {
-            return 'Lembur reward Cicilan';
+            return view('gaji-pegawai.lembur-reward-cicilan.index');
         });
         Route::get('lembur-reward-cicilan/upload-excel', function () {
             return 'Lembur reward Cicilan upload excel';
         });
-        Route::get('lembur-reward-cicilan/{$id}/update', function ($id) {
-            return 'Lembur reward Cicilan edit ' . $id;
+        Route::get('lembur-reward-cicilan/{id}/edit', function ($id) {
+            return view('gaji-pegawai.lembur-reward-cicilan.edit');
         });
-        Route::get('lembur-reward-cicilan/{$id}/remove', function ($id) {
+        Route::get('lembur-reward-cicilan/{id}/remove', function ($id) {
             return 'Lembur reward Cicilan hapus ' . $id;
         });
         Route::get('tetap', function () {

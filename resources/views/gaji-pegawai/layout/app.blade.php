@@ -11,7 +11,7 @@
     <title>{{ $title }}</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -24,11 +24,9 @@
     <!-- Custom styles for this page -->
     <link href="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     @stack('style')
-
 </head>
 
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -87,8 +85,8 @@
                             Cicilan
                         </a>
 
-                        <a class="collapse-item"
-                            href="{{ url()->to('/gaji-pegawai/tunjangan/tetap') }}">Tunjangan Tetap
+                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/tunjangan/tetap') }}">Tunjangan
+                            Tetap
                         </a>
                         <a class="collapse-item"
                             href="{{ url()->to('/gaji-pegawai/tunjangan/tidak-tetap') }}">Tunjangan Tidak Tetap
@@ -136,27 +134,17 @@
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
         </ul>
-
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
             <!-- Main Content -->
             <div id="content">
-
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
-
-
                     <ul class="navbar-nav ml-auto">
-
-
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -192,10 +180,7 @@
                                 <h6 class="dropdown-header">
                                     Evaluasi Bulan Ini
                                 </h6>
-
-
                                 <div class="dropdown-menuu">
-
                                 </div>
                             </div>
                         </li>
@@ -206,13 +191,12 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Hallo , Silmi</span>
-                                <img class="img-profile rounded-circle" src="../asset/img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle"
+                                    src="{{ asset('assets/img/undraw_profile.svg') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-
-
                                 <a class="dropdown-item" href="#" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -220,67 +204,102 @@
                                 </a>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
+                <div class="container-fluid">
+                    @yield('content')
+                </div>
+            </div>
+            <footer class="sticky-footer bg-white mt-3 mb-2">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Aplikasi Payroll Copyright &copy; 2022 - {{ date('Y') }} init by Aris Wahyudi</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
 
-                <!-- Bootstrap core JavaScript-->
-                <script src="../vendor/jquery/jquery.min.js"></script>
-                <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Apa Anda Yakin Keluar ?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Pilih Tombol Logout Untuk Keluar Sistem Ini</div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" href="{{ url()->to('/home') }}">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Core plugin JavaScript-->
-                <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
+    <!-- Page level plugins -->
+    <script src="{{ asset('assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-                <!-- Custom scripts for all pages-->
-                <script src="../js/sb-admin-2.min.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('assets/js/demo/datatables-demo.js') }}"></script>
 
-                <!-- Page level plugins -->
-                <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-                <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="{{ asset('assets/chartjs/Chart.min.js') }}"></script>
 
-                <!-- Page level custom scripts -->
-                <script src="../js/demo/datatables-demo.js"></script>
-
-                <!-- Page level plugins -->
-                <script src="../vendor/chart.js/Chart.min.js"></script>
-
-                <!-- Page level custom scripts -->
-                <script src="../js/demo/chart-area-demo.js"></script>
-                <script src="../js/demo/chart-pie-demo.js"></script>
-
-                <script type="text/javascript" src="../chartjs/Chart.js"></script>
-
-
-
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                        // updating the view with notifications using ajax
-                        function load_notification(view = '') {
-                            $.ajax({
-                                url: "fetch.php",
-                                method: "POST",
-                                data: {
-                                    view: view
-                                },
-                                dataType: "json",
-                                success: function(data) {
-                                    $('.dropdown-menuu').html(data.notification);
-                                    if (data.unseen_notification > 0) {
-                                        $('.count').html(data.unseen_notification);
-                                    }
-                                }
-                            });
+    <!-- Page level custom scripts -->
+    {{-- <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script> --}}
+    <script type="text/javascript" src="{{ asset('assets/chartjs/Chart.js') }}"></script>
+    <script type="text/javascript">
+        /*
+            $(document).ready(function() {
+                updating the view with notifications using ajax
+                function load_notification(view = '') {
+                    $.ajax({
+                        url: "fetch.php",
+                        method: "POST",
+                        data: {
+                            view: view
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            $('.dropdown-menuu').html(data.notification);
+                            if (data.unseen_notification > 0) {
+                                $('.count').html(data.unseen_notification);
+                            }
                         }
-
-                        load_notification();
-                        // load new notifications
-                        $(document).on('click', '.dropdown-toggle', function() {
-                            $('.count').html('');
-                            load_notification('yes');
-                        });
-                        setInterval(function() {
-                            load_notification();
-                        }, 5000);
                     });
-                </script>
+                }
+
+                load_notification();
+                // load new notifications
+                $(document).on('click', '.dropdown-toggle', function() {
+                    $('.count').html('');
+                    load_notification('yes');
+                });
+                setInterval(function() {
+                    load_notification();
+                }, 5000);
+            }); 
+            */
+    </script>
+    @stack('script')
+</body>
