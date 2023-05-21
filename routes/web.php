@@ -32,8 +32,8 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('users', function () {
             return view('gaji-pegawai.user.index');
         });
-        Route::get('users/{id}/change-password', function ($id) {
-            return "User $id ganti password";
+        Route::get('users/{nip}/change-password', function ($nip) {
+            return "User $nip ganti password";
         });
 
         Route::get('direksi', function () {
@@ -42,11 +42,11 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('direksi/add', function () {
             return 'Direksi tambah';
         });
-        Route::get('direksi/{id}/edit', function ($id) {
+        Route::get('direksi/{nip}/edit', function ($nip) {
             return view('gaji-pegawai.direksi.edit');
         });
-        Route::get('direksi/{id}/remove', function ($id) {
-            return "Direksi $id hapus";
+        Route::get('direksi/{nip}/remove', function ($nip) {
+            return "Direksi $nip hapus";
         });
         
         Route::get('karyawan', function () {
@@ -55,17 +55,17 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('karyawan/add', function () {
             return 'Tambah Karyawan';
         });
-        Route::get('karyawan/{id}/edit', function ($id) {
+        Route::get('karyawan/{nip}/edit', function ($nip) {
             return view('gaji-pegawai.karyawan.edit');
         });
-        Route::get('karyawan/{id}/remove', function ($id) {
-            return "Karyawan $id hapus";
+        Route::get('karyawan/{nip}/remove', function ($nip) {
+            return "Karyawan $nip hapus";
         });
-        Route::get('karyawan/{id}/ubah-tipe', function ($id) {
-            return "Karyawan $id tipe diubah";
+        Route::get('karyawan/{nip}/ubah-tipe', function ($nip) {
+            return "Karyawan $nip tipe diubah";
         });
-        Route::get('karyawan/{id}/ubah-status', function ($id) {
-            return "Karyawan $id status diubah";
+        Route::get('karyawan/{nip}/ubah-status', function ($nip) {
+            return "Karyawan $nip status diubah";
         });
     });
     Route::prefix('/tunjangan')->group(function () {
@@ -75,11 +75,11 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('lembur-sales/add', function () {
             return 'Lembur Sales tambah';
         });
-        Route::get('lembur-sales/{id}/edit', function ($id) {
+        Route::get('lembur-sales/{nip}/edit', function ($nip) {
             return view('gaji-pegawai.lembur-per-jam.edit');
         });
-        Route::get('lembur-sales/{id}/remove', function ($id) {
-            return 'Lembur Sales '.$id.' hapus';
+        Route::get('lembur-sales/{nip}/remove', function ($nip) {
+            return 'Lembur Sales '.$nip.' hapus';
         });
         Route::get('lembur-reward-cicilan', function () {
             return view('gaji-pegawai.lembur-reward-cicilan.index');
@@ -87,53 +87,81 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('lembur-reward-cicilan/upload-excel', function () {
             return 'Lembur reward Cicilan upload excel';
         });
-        Route::get('lembur-reward-cicilan/{id}/edit', function ($id) {
+        Route::get('lembur-reward-cicilan/{nip}/edit', function ($nip) {
             return view('gaji-pegawai.lembur-reward-cicilan.edit');
         });
-        Route::get('lembur-reward-cicilan/{id}/remove', function ($id) {
-            return 'Lembur reward Cicilan hapus ' . $id;
+        Route::get('lembur-reward-cicilan/{nip}/remove', function ($nip) {
+            return 'Lembur reward Cicilan hapus ' . $nip;
         });
         Route::get('tetap', function () {
-            return 'Tunjangan tetap';
+            return view('gaji-pegawai.tunjangan-tetap.index');
         });
         Route::get('tetap/add', function () {
             return 'Tunjangan tetap tambah';
         });
-        Route::get('tetap/{id}/show', function ($id) {
-            return 'Tunjangan tetap lihat';
+        Route::get('tetap/{nip}/show', function ($nip) {
+            return view('gaji-pegawai.tunjangan-tetap.show');
+        });
+        Route::get('tetap/{nip}/{tunjangan}/{id}/edit', function ($nip, $tunjangan, $id) {
+            switch ($tunjangan) {
+                case 'keahlian':
+                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Keahlian']);
+                    break;
+                case 'kepala-keluarga':
+                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Kepala Keluarga']);
+                    break;
+                case 'masa-kerja':
+                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Masa Kerja']);
+                    break;
+                case 'reward':
+                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Reward']);
+                    break;
+                case 'lembur':
+                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Lembur']);
+                    break;
+                case 'infaq':
+                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Infaq']);
+                    break;
+                case 'cicilan':
+                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Cicilan']);
+                    break;
+                default:
+                    return abort(404);
+                    break;
+            }
         });
         Route::get('tidak-tetap', function () {
-            return 'Tunjangan tidak tetap';
+            return view('gaji-pegawai.tunjangan-tidak-tetap.index');
         });
         Route::get('tidak-tetap/add', function () {
             return 'Tunjangan tidak tetap tambah';
         });
-        Route::get('tidak-tetap/{id}/show', function ($id) {
-            return 'Tunjangan tidak tetap lihat ' . $id;
+        Route::get('tidak-tetap/{nip}/show', function ($nip) {
+            return view('gaji-pegawai.tunjangan-tidak-tetap.show');
         });
-        Route::get('tidak-tetap/{id}/edit', function ($id) {
-            return 'Tunjangan tidak tetap edit ' . $id;
+        Route::get('tidak-tetap/{nip}/edit', function ($nip) {
+            return view('gaji-pegawai.tunjangan-tidak-tetap.edit');
         });
-        Route::get('tidak-tetap/{id}/remove', function ($id) {
-            return 'Tunjangan tidak tetap hapus ' . $id;
+        Route::get('tidak-tetap/{nip}/remove', function ($nip) {
+            return 'Tunjangan tidak tetap hapus ' . $nip;
         });
     });
     Route::get('kartu-cicilan', function () {
-        return 'Kartu cicilan';
+        return view('gaji-pegawai.kartu-cicilan.index');
     });
     Route::get('kartu-cicilan/add', function () {
         return 'Kartu cicilan tambah';
     });
     Route::get('gaji', function () {
-        return 'Take home/gaji';
+        return view('gaji-pegawai.gaji.index');
     });
     Route::get('gaji/print', function () {
         return 'Take home/gaji print';
     });
     Route::get('akumulasi-gaji', function () {
-        return 'Akumulasi gaji';
+        return view('gaji-pegawai.akumulasi.index');
     });
     Route::get('laporan', function () {
-        return 'Laporan';
+        return view('gaji-pegawai.laporan.index');
     });
 });

@@ -19,7 +19,7 @@
                                         <div class="form-group">
                                             <div class="section-title mt-0">Nama</div>
                                             <div class="input-group mb-2">
-                                                <input type="text" value="YOJIRO"
+                                                <input type="text" value="Karyawan 1"
                                                     class="form-control" readonly>
                                             </div>
                                         </div>

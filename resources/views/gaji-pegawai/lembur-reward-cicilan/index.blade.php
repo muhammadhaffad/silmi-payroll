@@ -33,11 +33,11 @@
                         <tr>
                             <td>1</td>
                             <td>207</td>
-                            <td>Yojiro</td>
-                            <td>IT Programmer</td>
-                            <td>{{ 'Rp.' . number_format(100000, 2, ',', '.') }}</td>
-                            <td>{{ 'Rp.' . number_format(50000, 2, ',', '.') }}</td>
-                            <td>{{ 'Rp.' . number_format(0, 2, ',', '.') }}</td>
+                            <td>Karyawan 1</td>
+                            <td>IT Support</td>
+                            <td>{{ Helper::rupiah(200000) }}</td>
+                            <td>{{ Helper::rupiah(200000) }}</td>
+                            <td>{{ Helper::rupiah(200000) }}</td>
                             <td>
                                 <a href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-reward-cicilan/207/edit') }}" class="btn btn-primary btn-xs btn-action mr-1"
                                     title="Edit"><i class="fas fa-edit"></i></a>

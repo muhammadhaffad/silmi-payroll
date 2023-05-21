@@ -30,13 +30,13 @@
                         <tr>
                             <td>1</td>
                             <td>207</td>
-                            <td>Yojiro</td>
-                            <td>IT Programmer</td>
+                            <td>Karyawan 1</td>
+                            <td>IT Support</td>
                             <td>
-                                {{ 'Rp.' . number_format(100000, 2, ',', '.') }}
+                                {{ Helper::rupiah(200000) }}
                             </td>
                             <td>{{ 7 }}</td>
-                            <td>{{ 'Rp.' . number_format(50000, 2, ',', '.') }}</td>
+                            <td>{{ Helper::rupiah(200000) }}</td>
                             <td>
                                 <a href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-sales/1/edit') }}" class="btn btn-primary btn-xs btn-action mr-1"
                                     title="Edit"><i class="fas fa-edit"></i>
@@ -66,7 +66,7 @@
                                     <form action="#" method="POST" class="w-100">
                                         <select class="form-control" id="karyawan1" name="nip" required>
                                             <option disabled selected> Pilih Karyawan</option>
-                                            <option value="207">Yojiro - IT Programmer</option>
+                                            <option value="207">Karyawan 1 - IT Support</option>
                                         </select>
                                         <div class="form-group">
                                             <div class="section-title mt-0">Perjam</div>

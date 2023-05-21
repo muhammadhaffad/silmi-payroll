@@ -108,10 +108,10 @@
                         <tr>
                             <td>1</td>
                             <td>207</td>
-                            <td>Yojiro</td>
+                            <td>Karyawan 1</td>
                             <td class="text-center">Laki-laki</td>
                             <td>2000-04-03</td>
-                            <td>IT Programmer</td>
+                            <td>IT Support</td>
                             <td>2023-04-25</td>
                             <td>Lamongan</td>
                             <td class="text-center">

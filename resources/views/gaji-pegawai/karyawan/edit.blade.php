@@ -27,7 +27,7 @@
                                             <div class="form-group">
                                                 <div class="section-title mt-0">Nama Karyawan</div>
                                                 <div class="input-group mb-2">
-                                                    <input type="text" class="form-control" value="Yojiro"
+                                                    <input type="text" class="form-control" value="Karyawan 1"
                                                         name="nama_karyawan" required>
                                                 </div>
                                             </div>
@@ -50,14 +50,14 @@
                                             <div class="form-group">
                                                 <div class="section-title mt-0">Devisi</div>
                                                 <div class="input-group mb-2">
-                                                    <input type="text" class="form-control" value="IT Programmer"
+                                                    <input type="text" class="form-control" value="IT Support"
                                                         name="devisi" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="section-title mt-0">Jabatan</div>
                                                 <div class="input-group mb-2">
-                                                    <input type="text" class="form-control" value="IT Programmer"
+                                                    <input type="text" class="form-control" value="IT Support"
                                                         name="jabatan" required>
                                                 </div>
                                             </div>

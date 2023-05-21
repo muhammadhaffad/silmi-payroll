@@ -225,8 +225,8 @@
                             @endphp
                             <td>1</td>
                             <td>207</td>
-                            <td>Yojiro</td>
-                            <td>IT Programmer</td>
+                            <td>Karyawan 1</td>
+                            <td>IT Support</td>
                             <td>{{ Carbon\Carbon::parse('2023-04-25')->format('Y-m-d') }}</td>
                             <td>
                                 {{ "$year Tahun, $month Bulan, $day Hari" }}

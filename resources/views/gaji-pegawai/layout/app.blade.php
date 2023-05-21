@@ -41,7 +41,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item {{ (request()->is('gaji-pegawai/dashboard')) ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url()->to('/gaji-pegawai/dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
@@ -49,7 +49,7 @@
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item {{ (request()->is('gaji-pegawai/data-master*')) ? 'active' : '' }}">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -57,10 +57,9 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded ">
-                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/data-master/users') }}">Data User</a>
-                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/data-master/direksi') }}">Data
-                            Direksi</a>
-                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/data-master/karyawan') }}">Data
+                        <a class="collapse-item {{ (request()->is('gaji-pegawai/data-master/users*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/data-master/users') }}">Data User</a>
+                        <a class="collapse-item {{ (request()->is('gaji-pegawai/data-master/direksi*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/data-master/direksi') }}">Data Direksi</a>
+                        <a class="collapse-item {{ (request()->is('gaji-pegawai/data-master/karyawan*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/data-master/karyawan') }}">Data
                             Karyawan</a>
                     </div>
                 </div>
@@ -68,7 +67,7 @@
 
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item {{ (request()->is('gaji-pegawai/tunjangan*')) ? 'active' : '' }}">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -77,25 +76,19 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-sales') }}">Lembur
-                            (SALES)
+                        <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/lembur-sales*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-sales') }}">Lembur (SALES)
                         </a>
-                        <a class="collapse-item"
-                            href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-reward-cicilan') }}">Lembur Reward
-                            Cicilan
+                        <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/lembur-reward-cicilan*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-reward-cicilan') }}">Lembur Reward Cicilan
                         </a>
-
-                        <a class="collapse-item" href="{{ url()->to('/gaji-pegawai/tunjangan/tetap') }}">Tunjangan
-                            Tetap
+                        <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/tetap*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/tetap') }}">Tunjangan Tetap
                         </a>
-                        <a class="collapse-item"
-                            href="{{ url()->to('/gaji-pegawai/tunjangan/tidak-tetap') }}">Tunjangan Tidak Tetap
+                        <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/tidak-tetap*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/tidak-tetap') }}">Tunjangan Tidak Tetap
                         </a>
                     </div>
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item {{ (request()->is('gaji-pegawai/kartu-cicilan*')) ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url()->to('/gaji-pegawai/kartu-cicilan') }}">
                     <i class="fas fa-credit-card"></i>
                     <span>Kartu Cicilan</span>
@@ -105,7 +98,7 @@
             <!-- Nav Item - Charts -->
 
 
-            <li class="nav-item">
+            <li class="nav-item {{ (request()->is('gaji-pegawai/gaji*')) ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url()->to('/gaji-pegawai/gaji') }}">
 
                     <i class="fas fa-fw fa-chart-area"></i>
@@ -114,14 +107,14 @@
             </li>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
+            <li class="nav-item {{ (request()->is('gaji-pegawai/akumulasi-gaji*')) ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url()->to('/gaji-pegawai/akumulasi-gaji') }}">
                     <i class="fas fa-coins"></i>
                     <span>Akumulasi</span>
                 </a>
             </li>
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
+            <li class="nav-item {{ (request()->is('gaji-pegawai/laporan*')) ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url()->to('/gaji-pegawai/laporan') }}">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Laporan</span>

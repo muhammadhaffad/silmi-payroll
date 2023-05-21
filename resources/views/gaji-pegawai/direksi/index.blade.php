@@ -29,11 +29,11 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>Yojiro</td>
+                            <td>Karyawan 1</td>
                             <td>Laki-laki</td>
-                            <td>{{ 'Rp.' . number_format(2000000, 2, ',', '.') }}</td>
-                            <td>{{ 'Rp.' . number_format(500000, 2, ',', '.') }}</td>
-                            <td>{{ 'Rp.' . number_format(2500000, 2, ',', '.') }}</td>
+                            <td>{{ Helper::rupiah(200000) }}</td>
+                            <td>{{ Helper::rupiah(200000) }}</td>
+                            <td>{{ Helper::rupiah(200000) }}</td>
                             <td>
                                 <a href="{{ url()->to('/gaji-pegawai/data-master/direksi/1/edit') }}"
                                     class="btn btn-primary btn-xs btn-action mr-1" title="Edit">
