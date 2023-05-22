@@ -9,6 +9,7 @@ use App\Models\Installment;
 use App\Models\Overtime;
 use App\Models\Reward;
 use App\Models\SeniorityAllowance;
+use Illuminate\Support\Facades\Validator;
 
 class FixedAllowanceService
 {
@@ -33,7 +34,7 @@ class FixedAllowanceService
         $validator = Validator::make($attr, [
             'nip' => 'required|numeric',
             'tunjangan' => 'required',
-            'nama' => 'array',
+            'nama' => 'sometimes|array',
             'nama.*' => 'sometimes|string',
             'jumlah' => 'array',
             'jumlah.*' => 'required|numeric',
@@ -45,50 +46,113 @@ class FixedAllowanceService
                 'errors' => $validator->errors()
             ];
         }
-        $attrMany = [];
-        foreach ($attr['nama'] as $key => $nama) {
-            $attrMany[] = [
-                'nama' => $nama,
-                'jumlah' => $attr['jumlah'][$key]
-            ];
-        }
         if ($attr['tunjangan'] === 'keahlian') {
+            $attrMany = [];
+            foreach ($attr['nama'] as $key => $nama) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => $nama,
+                    'jumlah' => $attr['jumlah'][$key],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
             ExpertiseAllowance::insert($attrMany);
             return [
                 'code' => 204,
                 'message' => 'Tunjangan berhasil ditambah'
             ];
-        } else if ($attr['tunjangan'] === 'kepala keluarga') {
+        } else if ($attr['tunjangan'] === 'kepala-keluarga') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Kepala Keluarga',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
             HouseholdAllowance::insert($attrMany);
             return [
                 'code' => 204,
                 'message' => 'Tunjangan berhasil ditambah'
             ];
-        } else if ($attr['tunjangan'] === 'masa kerja') {
+        } else if ($attr['tunjangan'] === 'masa-kerja') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Masa Kerja',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
             SeniorityAllowance::insert($attrMany);
             return [
                 'code' => 204,
                 'message' => 'Tunjangan berhasil ditambah'
             ];
         } else if ($attr['tunjangan'] === 'reward') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Reward',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
             Reward::insert($attrMany);
             return [
                 'code' => 204,
                 'message' => 'Tunjangan berhasil ditambah'
             ];
         } else if ($attr['tunjangan'] === 'lembur') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Lembur',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
             Overtime::insert($attrMany);
             return [
                 'code' => 204,
                 'message' => 'Tunjangan berhasil ditambah'
             ];
         } else if ($attr['tunjangan'] === 'infaq') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Infaq',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
             Infaq::insert($attrMany);
             return [
                 'code' => 204,
                 'message' => 'Tunjangan berhasil ditambah'
             ];
         } else if ($attr['tunjangan'] === 'cicilan') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Cicilan',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
             Installment::insert($attrMany);
             return [
                 'code' => 204,
@@ -96,7 +160,7 @@ class FixedAllowanceService
             ];
         }
         return [
-            'code' => 404,
+            'code' => 400,
             'message' => 'Tunjangan tidak valid ngab'
         ]; 
     }
@@ -111,7 +175,14 @@ class FixedAllowanceService
             'overtimes',
             'infaqs',
             'installments'
-        ])->get();
+        ])
+        ->loadSum('expertiseAllowances', 'jumlah')
+        ->loadSum('householdAllowances', 'jumlah')
+        ->loadSum('seniorityAllowances', 'jumlah')
+        ->loadSum('rewards', 'jumlah')
+        ->loadSum('overtimes', 'jumlah')
+        ->loadSum('infaqs', 'jumlah')
+        ->loadSum('installments', 'jumlah');
         return [
             'code' => 200,
             'message' => 'Data berhasil didapatkan',

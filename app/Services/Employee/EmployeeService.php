@@ -2,6 +2,7 @@
 namespace App\Services\Employee;
 
 use App\Models\Employee;
+use Illuminate\Support\Facades\Validator;
 
 class EmployeeService
 {
@@ -11,6 +12,14 @@ class EmployeeService
             'code' => 200,
             'message' => 'Data berhasil didapatkan',
             'data' => Employee::all()
+        ];
+    }
+    public function getEmployee($nip)
+    {
+        return [
+            'code' => 200,
+            'message'=> 'Data berhasil didapatkan',
+            'data' => Employee::where('nip', $nip)->first()
         ];
     }
     public function addEmployee($attr)
@@ -50,7 +59,7 @@ class EmployeeService
             'data' => $employee
         ];
     }
-    public function updateEmployee($id, $attr)
+    public function updateEmployee($nip, $attr)
     {
         $validator = Validator::make($attr, [
             'nip' => 'required|numeric',
@@ -69,7 +78,7 @@ class EmployeeService
                 'errors' => $validator->errors()
             ];
         }
-        $employee = Employee::find($id);
+        $employee = Employee::where('nip', $nip)->first();
         $employee->nip = $attr['nip'];
         $employee->nama = $attr['nama'];
         $employee->jenis_kelamin = $attr['jenis_kelamin'];
@@ -85,9 +94,9 @@ class EmployeeService
             ];
         }
     }
-    public function deleteEmployee($id)
+    public function deleteEmployee($nip)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('nip', $nip)->first();
         if ($employee->delete()) {
             return [
                 'code' => 204,
@@ -95,9 +104,9 @@ class EmployeeService
             ];
         }
     }
-    public function toggleKhusus($id)
+    public function toggleKhusus($nip)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('nip', $nip)->first();
         if ($employee->is_khusus) {
             $employee->is_khusus = false;
         } else {
@@ -110,9 +119,9 @@ class EmployeeService
             ];
         }
     }
-    public function toggleStatus($id)
+    public function toggleStatus($nip)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('nip', $nip)->first();
         if ($employee->status) {
             $employee->status = false;
         } else {

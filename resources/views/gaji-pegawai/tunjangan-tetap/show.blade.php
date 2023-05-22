@@ -2,7 +2,7 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header bg-primary py-3">
-            <h1 class="h3 mb-2 text-white"> Detail Tunjangan Tidak Tetap</h1>
+            <h1 class="h3 mb-2 text-white"> Detail Tunjangan Tetap</h1>
         </div>
         <div class="card-body">
             <div class="d-flex justify-content-between">
@@ -10,26 +10,33 @@
                     <span class="d-block" style='font-size:20pt'>
                         <b>Detail Karyawan</b>
                     </span>
-                    <span class="d-block" style="font-size:15pt">Nama Karyawan : Karyawan 1 </span>
-                    <span class="d-block" style="font-size:15pt"> Jabatan : IT Support </span>
+                    <span class="d-block" style="font-size:15pt">Nama Karyawan : {{ $allowance->nama }}</span>
+                    <span class="d-block" style="font-size:15pt">Jabatan : {{ $allowance->jabatan }}</span>
                 </div>
                 <div>
-                    <span class="d-block font-weight-bold" style='font-size:15pt'>Tunjangan (T. Keahlian, T. Kepala
-                        Keluarga, T.
-                        Masa Kerja)</span>
+                    <span class="d-block font-weight-bold" style='font-size:15pt'>Tunjangan (T. Keahlian, T. Kepala Keluarga, T. Masa Kerja)</span>
                     <span class="d-block text-success" style="font-size:15pt">
-                        {{ Helper::rupiah(200000) }}
+                        @php
+                            $total = $allowance->expertise_allowances_sum_jumlah + $allowance->household_allowances_sum_jumlah + $allowance->seniority_allowances_sum_jumlah
+                        @endphp
+                        {{ Helper::rupiah($total) }}
                     </span>
                     <hr>
                     <span class="d-block fontfont-weight-bold" style='font-size:15pt'>Reward & Lembur</span>
                     <span class="d-block text-success" style="font-size:15pt">
-                        {{ Helper::rupiah(200000) }}
+                        @php
+                            $total = $allowance->rewards_sum_jumlah + $allowance->overtimes_sum_jumlah;
+                        @endphp
+                        {{ Helper::rupiah($total) }}
                     </span>
 
                     <hr>
                     <span class="d-block font-weight-bold" style='font-size:15pt'>Cicilan & Infaq</span>
                     <span class="d-block text-danger" style="font-size:15pt">
-                        {{ Helper::rupiah(200000) }}
+                        @php
+                            $total = $allowance->infaqs_sum_jumlah + $allowance->installments_sum_jumlah;
+                        @endphp
+                        {{ Helper::rupiah($total) }}
                     </span>
                 </div>
             </div>
@@ -73,22 +80,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Ngodonf</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <button class="keahlian btn btn-success btn-action btn-xs mr-1">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/keahlian/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="deletedetail.php?idkeahlian=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1" id="hapus" title="hapus">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        @forelse ($allowance->expertiseAllowances as $expertiseAllowance)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $expertiseAllowance->nama }}</td>
+                                <td>{{ Helper::rupiah($expertiseAllowance->jumlah) }}</td>
+                                <td>
+                                    <button class="keahlian btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/keahlian/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="deletedetail.php?idkeahlian=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1" id="hapus" title="hapus">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" align="center">
+                                    Data kosong
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
@@ -96,7 +111,7 @@
                                 Total Keseluruhan
                             </td>
                             <td colspan="2" class="text-success" align="right">
-                                {{ Helper::rupiah(200000) }}
+                                {{ Helper::rupiah($allowance->expertise_allowances_sum_jumlah) }}
                             </td>
                         </tr>
                     </tfoot>
@@ -141,23 +156,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Tunjangan Kepala Keluarga</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <button class="kepala-keluarga btn btn-success btn-action btn-xs mr-1" id="tampil2"><i
-                                        class="fas fa-plus"></i></button>
-
-                                <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/kepala-keluarga/1/edit") }}"
-                                    class="btn btn-primary btn-xs btn-action mr-1" title="Edit"><i
-                                        class="fas fa-edit"></i></a>
-
-                                <a href="deletedetail.php?idkepalakeluarga=<?= '' ?>"
-                                    class="btn btn-danger btn-xs delete-data mr-1" title="hapus"><i
-                                        class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
+                        @forelse ($allowance->householdAllowances as $householdAllowance)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $householdAllowance->nama }}</td>
+                                <td>{{ Helper::rupiah($householdAllowance->jumlah) }}</td>
+                                <td>
+                                    <button class="kepala-keluarga btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/keahlian/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="deletedetail.php?idkeahlian=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1" id="hapus" title="hapus">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" align="center">
+                                    Data kosong
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
@@ -165,7 +187,7 @@
                                 Total Keseluruhan
                             </td>
                             <td colspan="2" class="text-success text-right">
-                                {{ Helper::rupiah(200000) }}
+                                {{ Helper::rupiah($allowance->household_allowances_sum_jumlah) }}
                             </td>
                         </tr>
                     </tfoot>
@@ -212,26 +234,30 @@
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Tunjangan Masa Kerja</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <button class="masa-kerja btn btn-success btn-action btn-xs mr-1" id="tampil3"><i
-                                        class="fas fa-plus"></i>
-                                </button>
-
-                                <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/masa-kerja/1/edit") }}"
-                                    class="btn btn-primary btn-xs btn-action mr-1" title="Edit"><i
-                                        class="fas fa-edit"></i>
-                                </a>
-
-                                <a href="deletedetail.php?idmasakerja=<?= '' ?>"
-                                    class="btn btn-danger btn-xs delete-data mr-1" title="hapus">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        @forelse ($allowance->seniorityAllowances as $seniorityAllowance)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $seniorityAllowance->nama }}</td>
+                                <td>{{ Helper::rupiah($seniorityAllowance->jumlah) }}</td>
+                                <td>
+                                    <button class="masa-kerja btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/keahlian/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="deletedetail.php?idkeahlian=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1" id="hapus" title="hapus">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" align="center">
+                                    Data kosong
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
@@ -239,7 +265,7 @@
                                 Total Keseluruhan
                             </td>
                             <td colspan="2" class="text-success text-right">
-                                {{ Helper::rupiah(200000) }}</td>
+                                {{ Helper::rupiah($allowance->seniority_allowances_sum_jumlah) }}</td>
                         </tr>
                     </tfoot>
                 </table>

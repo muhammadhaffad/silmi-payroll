@@ -1,5 +1,8 @@
 @extends('gaji-pegawai.layout.app', ['title'=>'Karyawan'])
 @push('style')
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
+@endpush
+@push('style')
     <style>
         .switch {
             position: relative;
@@ -87,7 +90,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="example" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -105,47 +108,56 @@
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>207</td>
-                            <td>Karyawan 1</td>
-                            <td class="text-center">Laki-laki</td>
-                            <td>2000-04-03</td>
-                            <td>IT Support</td>
-                            <td>2023-04-25</td>
-                            <td>Lamongan</td>
-                            <td class="text-center">
-                                <label class="switch">
-                                    <form action="{{ url()->to('/gaji-pegawai/data-master/karyawan/207/ubah-tipe') }}"
-                                        method="post">
-                                        <input type="checkbox" name="nip" value="207" checked>
-                                        <span class="slider round"></span>
-                                    </form>
-                                </label>
-                            </td>
-                            <td class="text-center">
-                                <label class="switch">
-                                    <form action="{{ url()->to('/gaji-pegawai/data-master/karyawan/207/ubah-status') }}"
-                                        method="post">
-                                        <input type="checkbox" name="nip" value="207" checked>
-                                        <span class="slider round"></span>
-                                    </form>
-                                </label>
-                                <div id="resultstatus"> <span class="text-white badge bg-success">Aktif</span></div>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <a href="{{ url()->to('/gaji-pegawai/data-master/karyawan/207/edit') }}"
-                                        class="btn btn-primary btn-xs btn-action mr-1" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="{{ url()->to('/gaji-pegawai/data-master/karyawan/207/remove') }}"
-                                        class="btn btn-danger btn-xs delete-data mr-1" title="hapus">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                        @forelse ($employees as $employee)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $employee->nip }}</td>
+                                <td>{{ $employee->nama }}</td>
+                                <td>{{ $employee->jenis_kelamin }}</td>
+                                <td class="text-nowrap">{{ $employee->tanggal_lahir }}</td>
+                                <td class="text-nowrap">{{ $employee->jabatan }}</td>
+                                <td class="text-nowrap">{{ $employee->tanggal_masuk }}</td>
+                                <td>{{ $employee->alamat }}</td>
+                                <td class="text-center">
+                                    <label class="switch">
+                                        <form action="{{ url()->to("/gaji-pegawai/data-master/karyawan/$employee->nip/ubah-tipe") }}" method="post" onchange="return this.submit()">
+                                            @csrf
+                                            <input type="checkbox" name="nip" value="207" @checked($employee->is_khusus)>
+                                            <span class="slider round"></span>
+                                        </form>
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    <label class="switch">
+                                        <form action="{{ url()->to("/gaji-pegawai/data-master/karyawan/$employee->nip/ubah-status") }}" method="post" onchange="return this.submit()">
+                                            @csrf
+                                            <input type="checkbox" name="nip" value="207" @checked($employee->status)>
+                                            <span class="slider round"></span>
+                                        </form>
+                                    </label>
+                                    <div id="resultstatus"> <span class="text-white badge {{ $employee->status ? 'bg-success' : 'bg-danger' }}">{{ $employee->status ? 'Aktif' : 'Tidak Aktif' }}</span></div>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <a href="{{ url()->to("/gaji-pegawai/data-master/karyawan/$employee->nip/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ url()->to("/gaji-pegawai/data-master/karyawan/$employee->nip/remove") }}" method="post">
+                                            @csrf
+                                            <button class="btn btn-danger btn-xs delete-data mr-1">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="11" align="center">
+                                    Data Kosong
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
 
@@ -160,7 +172,8 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="POST">
+                                <form action="{{ url()->to("gaji-pegawai/data-master/karyawan/add") }}" method="POST">
+                                    @csrf
                                     <div class="form-group">
                                         <div class="section-title mt-0">Nip</div>
                                         <div class="input-group mb-2">
@@ -170,7 +183,7 @@
                                     <div class="form-group">
                                         <div class="section-title mt-0">Nama Karyawan</div>
                                         <div class="input-group mb-2">
-                                            <input type="text" class="form-control" name="nama_karyawan" required>
+                                            <input type="text" class="form-control" name="nama" required>
                                         </div>
                                     </div>
                                     <div class="widget-body mt-3">
@@ -178,21 +191,17 @@
                                             <div class="section-title mt-0">Jenis Kelamin</div>
                                             <select class="custom-select" name="jenis_kelamin">
                                                 <option disabled selected>Pilih Jenis Kelamin</option>
-
-                                                <option value="L">Laki - Laki</option>
-
-                                                <option value="P">Perempuan</option>
+                                                <option value="Laki-laki">Laki-laki</option>
+                                                <option value="Perempuan">Perempuan</option>
                                             </select>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <div class="section-title mt-0">Tanggal Lahir</div>
                                         <div class="input-group mb-2">
-                                            <input type="date" class="form-control" name="ttl" required>
+                                            <input type="date" class="form-control" name="tanggal_lahir" required>
                                         </div>
                                     </div>
-
                                     <div class="widget-body mt-3">
                                         <div class="form-group">
                                             <div class="section-title mt-0">Pilih Devisi</div>
@@ -207,18 +216,16 @@
                                             </select>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <div class="section-title mt-0">Jabatan</div>
                                         <div class="input-group mb-2">
                                             <input type="text" class="form-control" name="jabatan" required>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <div class="section-title mt-0">Tangal Masuk</div>
                                         <div class="input-group mb-2">
-                                            <input type="date" class="form-control" name="tgl_masuk" required>
+                                            <input type="date" class="form-control" name="tanggal_masuk" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -227,10 +234,8 @@
                                             <input type="text" class="form-control" name="alamat" required>
                                         </div>
                                     </div>
-
                                     <div class="modal-footer">
-                                        <button class="btn btn-primary mr-1" type="submit"
-                                            name="submit">Simpan</button>
+                                        <button class="btn btn-primary mr-1" type="submit" name="submit">Simpan</button>
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
@@ -259,3 +264,34 @@
         </script>
     @endif
 @endsection
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    @if (session()->has('error'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'warning',
+                    text: '{{ session()->get('error') }}',
+                    type: 'warning',
+                    icon: 'warning',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'success',
+                    text: '{{ session()->get('success') }}',
+                    type: 'success',
+                    icon: 'success',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+@endpush

@@ -13,6 +13,8 @@ class Installment extends Model
     protected $fillable = [
         'employee_nip',
         'nama',
-        'jumlah'
+        'jumlah',
+        'created_at',
+        'updated_at'
     ];
 }

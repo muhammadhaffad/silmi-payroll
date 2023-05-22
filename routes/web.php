@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FixedAllowanceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,24 +42,13 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::put('direksi/{nip}/edit', [DirectorController::class, 'update']);
         Route::post('direksi/{id}/remove', [DirectorController::class, 'remove']);
         
-        Route::get('karyawan', function () {
-            return view('gaji-pegawai.karyawan.index');
-        });
-        Route::get('karyawan/add', function () {
-            return 'Tambah Karyawan';
-        });
-        Route::get('karyawan/{nip}/edit', function ($nip) {
-            return view('gaji-pegawai.karyawan.edit');
-        });
-        Route::get('karyawan/{nip}/remove', function ($nip) {
-            return "Karyawan $nip hapus";
-        });
-        Route::get('karyawan/{nip}/ubah-tipe', function ($nip) {
-            return "Karyawan $nip tipe diubah";
-        });
-        Route::get('karyawan/{nip}/ubah-status', function ($nip) {
-            return "Karyawan $nip status diubah";
-        });
+        Route::get('karyawan', [EmployeeController::class, 'index']);
+        Route::post('karyawan/add', [EmployeeController::class, 'store']);
+        Route::get('karyawan/{nip}/edit', [EmployeeController::class, 'edit']);
+        Route::put('karyawan/{nip}/update', [EmployeeController::class, 'update']);
+        Route::post('karyawan/{nip}/remove', [EmployeeController::class, 'remove']);
+        Route::post('karyawan/{nip}/ubah-tipe', [EmployeeController::class, 'toggleKhusus']);
+        Route::post('karyawan/{nip}/ubah-status', [EmployeeController::class, 'toggleStatus']);
     });
     Route::prefix('/tunjangan')->group(function () {
         Route::get('lembur-sales', function () {
@@ -84,15 +75,9 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('lembur-reward-cicilan/{nip}/remove', function ($nip) {
             return 'Lembur reward Cicilan hapus ' . $nip;
         });
-        Route::get('tetap', function () {
-            return view('gaji-pegawai.tunjangan-tetap.index');
-        });
-        Route::get('tetap/add', function () {
-            return 'Tunjangan tetap tambah';
-        });
-        Route::get('tetap/{nip}/show', function ($nip) {
-            return view('gaji-pegawai.tunjangan-tetap.show');
-        });
+        Route::get('tetap', [FixedAllowanceController::class, 'index']);
+        Route::post('tetap/add', [FixedAllowanceController::class, 'addAllowance']);
+        Route::get('tetap/{nip}/show', [FixedAllowanceController::class, 'show']);
         Route::get('tetap/{nip}/{tunjangan}/{id}/edit', function ($nip, $tunjangan, $id) {
             switch ($tunjangan) {
                 case 'keahlian':
