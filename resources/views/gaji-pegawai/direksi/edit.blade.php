@@ -16,19 +16,21 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="card-body">
-                                        <form action="" enctype="multipart/form-data" method="post">
+                                        <form id="edit-direksi" action="{{url()->to("/gaji-pegawai/data-master/direksi/$director->id/edit")}}" enctype="multipart/form-data" method="POST">
+                                            @method('PUT')
+                                            @csrf
                                             <div class="form-group">
-                                                <div class="section-title mt-0">Nama Karyawan</div>
+                                                <div class="section-title mt-0">Nama Direksi</div>
                                                 <div class="input-group mb-2">
-                                                    <input type="text" class="form-control" value="{{ 'Karyawan 1' }}"
+                                                    <input type="text" class="form-control" value="{{ $director->nama }}"
                                                         name="nama" required>
                                                 </div>
                                             </div>
                                             <div class="widget-body mt-3">
                                                 <div class="form-group">
                                                     <select class="custom-select" name="jenis_kelamin">
-                                                        <option value="Laki - Laki" selected>Laki-laki</option>
-                                                        <option value="Perempuan">Perempuan</option>
+                                                        <option value="Laki-laki" @selected($director->jenis_kelamin === 'Laki-laki')>Laki-laki</option>
+                                                        <option value="Perempuan" @selected($director->jenis_kelamin === 'Perempuan')>Perempuan</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -36,7 +38,7 @@
                                             <div class="form-group">
                                                 <div class="section-title mt-0">Gaji</div>
                                                 <div class="input-group mb-2">
-                                                    <input type="text" class="form-control" value="1000000"
+                                                    <input type="text" class="form-control" value="{{ $director->gaji }}"
                                                         name="gaji" required>
                                                 </div>
                                             </div>
@@ -44,8 +46,8 @@
                                             <div class="form-group">
                                                 <div class="section-title mt-0">Gaji Tambahan</div>
                                                 <div class="input-group mb-2">
-                                                    <input type="text" class="form-control" value="500000"
-                                                        name="gajitambahan" required>
+                                                    <input type="text" class="form-control" value="{{ $director->gaji_tambahan }}"
+                                                        name="gaji_tambahan" required>
                                                 </div>
                                             </div>
                                         </form>
@@ -54,7 +56,7 @@
                             </div>
                         </div>
                         <div class="card-footer text-right">
-                            <button class="btn btn-primary mr-1" type="submit" name="submit">Submit</button>
+                            <button form="edit-direksi" class="btn btn-primary mr-1" type="submit" name="submit">Submit</button>
                             <!-- <button class="btn btn-danger" type="reset">Reset</button> -->
                         </div>
                     </div>

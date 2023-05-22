@@ -1,4 +1,7 @@
 @extends('gaji-pegawai.layout.app', ['title' => 'Direksi'])
+@push('style')
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
+@endpush
 @section('content')
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Data Direksi</h1>
@@ -27,26 +30,33 @@
                     </thead>
 
                     <tbody>
+                        @forelse ($directors as $director)
                         <tr>
-                            <td>1</td>
-                            <td>Karyawan 1</td>
-                            <td>Laki-laki</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <a href="{{ url()->to('/gaji-pegawai/data-master/direksi/1/edit') }}"
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$director->nama}}</td>
+                            <td>{{$director->jenis_kelamin}}</td>
+                            <td>{{ Helper::rupiah($director->gaji) }}</td>
+                            <td>{{ Helper::rupiah($director->gaji_tambahan) }}</td>
+                            <td>{{ Helper::rupiah($director->gaji + $director->gaji_tambahan) }}</td>
+                            <td class="d-flex">
+                                <a href="{{ url()->to("/gaji-pegawai/data-master/direksi/$director->id/edit") }}"
                                     class="btn btn-primary btn-xs btn-action mr-1" title="Edit">
                                     <i class="fas fa-edit">
                                     </i>
                                 </a>
-                                <a href="{{ url()->to('/gaji-pegawai/data-master/direksi/1/remove') }}"
-                                    class="btn btn-danger btn-xs delete-data mr-1" title="hapus"><i
-                                        class="fas fa-trash-alt">
-                                    </i>
-                                </a>
+                                <form action="{{ url()->to("/gaji-pegawai/data-master/direksi/$director->id/remove") }}" method="post">
+                                    @csrf
+                                    <button class="btn btn-danger btn-xs delete-data mr-1" title="hapus">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
+                        @empty
+                        <tr align="center">
+                            <td colspan="7">Data kosong</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <!-- MODAL -->
@@ -62,12 +72,12 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="POST">
+                                <form action="{{url()->to('gaji-pegawai/data-master/direksi/add')}}" method="POST">
+                                    @csrf
                                     <div class="form-group">
                                         <div class="section-title mt-0">Nama</div>
                                         <div class="input-group mb-2">
-                                            <input type="text" class="form-control" placeholder="Masukan Nama Direksi"
-                                                name="nama" required>
+                                            <input type="text" class="form-control" placeholder="Masukan Nama Direksi" name="nama" required>
                                         </div>
                                     </div>
                                     <div class="widget-body mt-3">
@@ -75,7 +85,7 @@
                                         <div class="form-group">
                                             <select class="custom-select" name="jenis_kelamin">
                                                 <option disabled selected>Pilih Jenis Kelamin</option>
-                                                <option value="Laki - Laki">Laki - Laki</option>
+                                                <option value="Laki-laki">Laki-laki</option>
                                                 <option value="Perempuan">Perempuan</option>
                                             </select>
                                         </div>
@@ -91,18 +101,16 @@
                                     <div class="form-group">
                                         <div class="section-title mt-0">Gaji Tambahan</div>
                                         <div class="input-group mb-2">
-                                            <input type="number" class="form-control" name="gajitambahan" required>
+                                            <input type="number" class="form-control" name="gaji_tambahan" required>
                                         </div>
                                     </div>
 
                                     <div class="modal-footer">
                                         <button class="btn btn-primary mr-1" type="submit" name="submit">Simpan</button>
-
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
                                     </div>
+                                </form>
                             </div>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -129,3 +137,34 @@
 
     </div>
 @endsection
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    @if (session()->has('error'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'warning',
+                    text: '{{ session()->get('error') }}',
+                    type: 'warning',
+                    icon: 'warning',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'success',
+                    text: '{{ session()->get('success') }}',
+                    type: 'success',
+                    icon: 'success',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+@endpush

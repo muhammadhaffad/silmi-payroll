@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,25 +31,14 @@ Route::prefix('/gaji-pegawai')->group(function () {
         return view('gaji-pegawai.dashboard.index');
     });
     Route::prefix('/data-master')->group(function () {
-        Route::get('users', function () {
-            return view('gaji-pegawai.user.index');
-        });
-        Route::get('users/{nip}/change-password', function ($nip) {
-            return "User $nip ganti password";
-        });
+        Route::get('users', [UserController::class, 'index']);
+        Route::post('users/{id}/change-password', [UserController::class, 'changePassword']);
 
-        Route::get('direksi', function () {
-            return view('gaji-pegawai.direksi.index');
-        });
-        Route::get('direksi/add', function () {
-            return 'Direksi tambah';
-        });
-        Route::get('direksi/{nip}/edit', function ($nip) {
-            return view('gaji-pegawai.direksi.edit');
-        });
-        Route::get('direksi/{nip}/remove', function ($nip) {
-            return "Direksi $nip hapus";
-        });
+        Route::get('direksi', [DirectorController::class, 'index']);
+        Route::post('direksi/add', [DirectorController::class, 'store']);
+        Route::get('direksi/{nip}/edit', [DirectorController::class, 'edit']);
+        Route::put('direksi/{nip}/edit', [DirectorController::class, 'update']);
+        Route::post('direksi/{id}/remove', [DirectorController::class, 'remove']);
         
         Route::get('karyawan', function () {
             return view('gaji-pegawai.karyawan.index');

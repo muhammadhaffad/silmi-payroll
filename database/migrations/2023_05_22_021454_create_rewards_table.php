@@ -14,17 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('rewards', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('employee_nip')->nullable();
+            $table->foreign('employee_nip')->references('nip')->on('employees')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
             $table->string('nama');
-            $table->string('username');
-            $table->string('password');
-            $table->timestamp('last_login')->nullable();
+            $table->unsignedInteger('jumlah');
             $table->timestamps();
             $table->softDeletes();
-            // $table->string('email')->unique();
-            // $table->timestamp('email_verified_at')->nullable();
-            // $table->rememberToken();
         });
         Schema::enableForeignKeyConstraints();
     }
@@ -37,7 +36,7 @@ return new class extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('rewards');
         Schema::enableForeignKeyConstraints();
     }
 };
