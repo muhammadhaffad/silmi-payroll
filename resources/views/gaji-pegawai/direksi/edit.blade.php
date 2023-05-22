@@ -1,4 +1,7 @@
 @extends('gaji-pegawai.layout.app', ['title' => 'Direksi'])
+@push('style')
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
+@endpush
 @section('content')
     <div class="card">
         <div class="card-body">
@@ -65,3 +68,34 @@
         </div>
     </div>
 @endsection
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    @if (session()->has('error'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'warning',
+                    text: '{{ session()->get('error') }}',
+                    type: 'warning',
+                    icon: 'warning',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'success',
+                    text: '{{ session()->get('success') }}',
+                    type: 'success',
+                    icon: 'success',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+@endpush
