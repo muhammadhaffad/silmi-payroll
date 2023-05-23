@@ -22,6 +22,10 @@ class Employee extends Model
         'is_khusus',
         'status'
     ];
+    public function attendanceLogs()
+    {
+        return $this->hasMany(AttendanceLog::class, 'employee_nip', 'nip');
+    }
     public function variableAllowance()
     {
         return $this->hasOne(VariableAllowance::class, 'employee_nip', 'nip');

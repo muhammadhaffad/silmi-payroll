@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Allowance;
 
+use App\Models\AttendanceLog;
 use App\Models\Employee;
 use App\Models\VariableAllowance;
 use Illuminate\Support\Facades\Validator;
@@ -9,7 +10,10 @@ class VariableAllowanceService
 {
     public function getAllEmployeeAllowances()
     {
-        $allowances = Employee::with('variableAllowance')->get();
+        $allowances = Employee::with('variableAllowance')->withSum(
+            ['attendanceLogs' => fn ($query) => $query->where('tanggal_expired', '>=', date('Y-m-d'))], 
+            'total_jam'
+        )->get();
         return [
             'code' => 200,
             'message' => 'Berhasil mendapatkan data',
@@ -86,6 +90,11 @@ class VariableAllowanceService
     }
     public function showWorkPresence($nip)
     {
-        return 'TAMPILKAN DATA ABSEN KERJA '. $nip;
+        $logs = AttendanceLog::where('employee_nip', $nip)->where('tanggal_expired', '>=', date('Y-m-d'))->get();
+        return [
+            'code' => 200,
+            'message' => 'Berhasil mendapatkan data',
+            'data' => $logs
+        ];
     }
 }

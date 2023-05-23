@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AttendanceLogsImport;
 use App\Services\Allowance\VariableAllowanceService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VariableAllowanceController extends Controller
 {
@@ -42,5 +44,15 @@ class VariableAllowanceController extends Controller
         if ($result['code'] == 400) {
             return redirect()->back()->with('error', $result['message']);
         }
+    }
+    public function showAttendance($nip)
+    {
+        $result = $this->variableAllowanceService->showWorkPresence($nip);
+        return view('gaji-pegawai.tunjangan-tidak-tetap.show', ['nip' => $nip, 'attendances' => $result['data']]);
+    }
+    public function uploadLog(Request $request)
+    {
+        Excel::import(new AttendanceLogsImport, $request->file('file'));
+        return redirect()->back()->with('success', 'File excel berhasil diupload');
     }
 }

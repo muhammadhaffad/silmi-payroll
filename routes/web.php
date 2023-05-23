@@ -85,14 +85,14 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::post('tetap/{nip}/{tunjangan}/{id}/remove', [FixedAllowanceController::class, 'remove']);
         Route::get('tidak-tetap', [VariableAllowanceController::class, 'index']);
         Route::post('tidak-tetap/add', [VariableAllowanceController::class, 'addAllowance']);
-        Route::get('tidak-tetap/{nip}/show', function ($nip) {
-            return view('gaji-pegawai.tunjangan-tidak-tetap.show');
-        });
+        Route::get('tidak-tetap/{nip}/show', [VariableAllowanceController::class, 'showAttendance']);
+        Route::post('tidak-tetap/upload', [VariableAllowanceController::class, 'uploadLog']);
         Route::put('tidak-tetap/{nip}/update', [VariableAllowanceController::class, 'update']);
         Route::get('tidak-tetap/{nip}/edit', [VariableAllowanceController::class, 'edit']);
         Route::get('tidak-tetap/{nip}/remove', function ($nip) {
             return 'Tunjangan tidak tetap hapus ' . $nip;
         });
+
     });
     Route::get('kartu-cicilan', function () {
         return view('gaji-pegawai.kartu-cicilan.index');

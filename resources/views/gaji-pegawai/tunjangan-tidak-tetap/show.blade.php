@@ -3,9 +3,12 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between">
             <div>
+                @php
+                    $employee = App\Models\Employee::where('nip', $nip)->first();
+                @endphp
                 <span class="d-block" style='font-size:20pt'><b>Detail Karyawan</b></span>
-                <span class="d-block" style="font-size:15pt">Nama Karyawan : Karyawan 1</span>
-                <span class="d-block" style="font-size:15pt"> Jabatan : IT Support </span>    
+                <span class="d-block" style="font-size:15pt">Nama Karyawan : {{$employee->nama}}</span>
+                <span class="d-block" style="font-size:15pt">Jabatan : {{$employee->jabatan}}</span>    
             </div>
             <div class="card-header-action text-right">
                 <a href="cetak.php?id=207" class="btn btn-primary btn-action btn-xs mr-1"
@@ -32,23 +35,27 @@
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Senin</td>
-                            <td>2023-05-19</td>
-                            <td>7:30:15</td>
-                            <td>16:05:15</td>
-                            <td>00:00:00</td>
-                            <td>00:00:00</td>
-                            <td>7 Jam 25 Menit 0 Detik</td>
-                        </tr>
+                        @forelse ($attendances as $attendance)   
+                            <tr>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{\Carbon\Carbon::parse($attendance->tanggal)->format('l')}}</td>
+                                <td>{{$attendance->tanggal}}</td>
+                                <td>{{$attendance->scan_1}}</td>
+                                <td>{{$attendance->scan_2}}</td>
+                                <td>{{$attendance->scan_3}}</td>
+                                <td>{{$attendance->scan_4}}</td>
+                                <td>{{$attendance->total_jam}}</td>
+                            </tr>
+                        @empty
+                            
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
                             <td>
                                 Total Keseluruhan
                             </td>
-                            <td colspan="7" class="text-success text-right">{{ Helper::rupiah(200000) }}</td>
+                            <td colspan="7" class="text-success text-right">{{ $attendances->sum('total_jam') }} Jam</td>
                         </tr>
                     </tfoot>
                 </table>

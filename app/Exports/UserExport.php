@@ -9,6 +9,8 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class UserExport implements FromCollection, WithStyles, WithCustomStartCell
 {
@@ -48,15 +50,21 @@ class UserExport implements FromCollection, WithStyles, WithCustomStartCell
         ];
         $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
         $sheet->setCellValue('A1', "Laporan Rekap Gaji Devisi $this->devision");
+        $sheet->getStyle('A1')->getFont()->setSize(16);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1')->getFont()->setBold(true);
         $sheet->setCellValue('A2', "Bulan $this->month Tahun $this->year");
+        $sheet->getStyle('A2')->getFont()->setSize(14);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2')->getFont()->setBold(true);
         $sheet->setCellValue('A4', "Detail");
         $sheet->setCellValue('A5', "Tanggal Cetak : " . date('Y-m-d'));
         $sheet->setCellValue('A6', "Periode : $this->month $this->year");
-        $sheet->mergeCells('A1:F1', Worksheet::MERGE_CELL_CONTENT_MERGE);
-        $sheet->mergeCells('A2:F2', Worksheet::MERGE_CELL_CONTENT_MERGE);
-        $sheet->mergeCells('A4:F4', Worksheet::MERGE_CELL_CONTENT_MERGE);
-        $sheet->mergeCells('A5:F5', Worksheet::MERGE_CELL_CONTENT_MERGE);
-        $sheet->mergeCells('A6:F6', Worksheet::MERGE_CELL_CONTENT_MERGE);
+        $sheet->mergeCells('A1:O1', Worksheet::MERGE_CELL_CONTENT_MERGE);
+        $sheet->mergeCells('A2:O2', Worksheet::MERGE_CELL_CONTENT_MERGE);
+        $sheet->mergeCells('A4:O4', Worksheet::MERGE_CELL_CONTENT_MERGE);
+        $sheet->mergeCells('A5:O5', Worksheet::MERGE_CELL_CONTENT_MERGE);
+        $sheet->mergeCells('A6:O6', Worksheet::MERGE_CELL_CONTENT_MERGE);
 
         $sheet->setCellValue('A8', "No");
         $sheet->mergeCells('A8:A9', Worksheet::MERGE_CELL_CONTENT_MERGE);
@@ -98,5 +106,9 @@ class UserExport implements FromCollection, WithStyles, WithCustomStartCell
         $sheet->getStyle('A8:O9')->applyFromArray($styleArray);
         $sheet->getStyle('A8:O9')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
         $sheet->getStyle('A8:O9')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A8:O9')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+        $sheet->getStyle('A8:O9')->getFont()->setBold(true);
+        $sheet->getRowDimension(8)->setRowHeight(40);
+        $sheet->getRowDimension(9)->setRowHeight(40);
     }
 }

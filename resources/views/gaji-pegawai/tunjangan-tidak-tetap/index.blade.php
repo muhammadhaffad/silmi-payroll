@@ -43,7 +43,13 @@
                             <td>{{ Helper::rupiah($employee->variableAllowance->gaji_pokok ?? 0) }}</td>
                             <td>{{ Helper::rupiah($employee->variableAllowance->tunjangan_jabatan ?? 0) }}</td>
                             <td>{{ Helper::rupiah($employee->variableAllowance->perjam ?? 0) }}</td>
-                            <td>{{ Helper::rupiah(($employee->variableAllowance->perjam ?? 0) * 182) }}</td>
+                            <td>
+                                @if ($employee->is_khusus)
+                                    {{ Helper::rupiah(($employee->variableAllowance->perjam ?? 0) * 182) }}
+                                @else
+                                    {{ Helper::rupiah(($employee->variableAllowance->perjam ?? 0) * $employee->attendance_logs_sum_total_jam) }}
+                                @endif
+                            </td>
                             <td class="d-flex">
                                 <a href="{{ url()->to("/gaji-pegawai/tunjangan/tidak-tetap/$employee->nip/show") }}"
                                     class="btn btn-success btn-xs  btn-action mr-1 mt-3" title="Lihat Detail Perjam"><i
@@ -128,11 +134,12 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url()->to("gaji-pegawai/tunjangan/tidak-tetap/upload") }}" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="form-group">
                                 <div class="section-title">Upload File Excel</div>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file form-control" name="namafile">
+                                    <input type="file" class="custom-file form-control" name="file">
                                 </div>
                             </div>
 
