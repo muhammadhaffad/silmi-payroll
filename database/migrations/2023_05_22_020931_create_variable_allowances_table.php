@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('variable_allowances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_nip')
-                ->nullable()
-                ->constrained()
+            $table->unsignedBigInteger('employee_nip')->nullable();
+            $table->foreign('employee_nip')->references('nip')->on('employees')
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
             $table->integer('gaji_pokok');

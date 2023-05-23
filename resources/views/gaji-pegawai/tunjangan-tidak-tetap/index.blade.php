@@ -1,5 +1,6 @@
 @extends('gaji-pegawai.layout.app', ['title' => 'Tunjangan Tidak Tetap'])
 @push('style')
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 @endpush
 @section('content')
@@ -28,33 +29,39 @@
                             <th>Gaji Pokok</th>
                             <th>Tunjangan Jabatan</th>
                             <th>Perjam</th>
-                            <th>Total Tunjangan Tetap</th>
+                            <th>Total Tunjangan Tidak Tetap</th>
                             <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
+                        @forelse ($employees as $employee)
                         <tr>
-                            <td>207</td>
-                            <td>Karyawan 1</td>
-                            <td class="text-nowrap">IT Support</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>{{ Helper::rupiah(300000) }}</td>
-                            <td>{{ Helper::rupiah(0) }}</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
+                            <td>{{$employee->nip}}</td>
+                            <td>{{$employee->nama}}</td>
+                            <td class="text-nowrap">{{$employee->jabatan}}</td>
+                            <td>{{ Helper::rupiah($employee->variableAllowance->gaji_pokok ?? 0) }}</td>
+                            <td>{{ Helper::rupiah($employee->variableAllowance->tunjangan_jabatan ?? 0) }}</td>
+                            <td>{{ Helper::rupiah($employee->variableAllowance->perjam ?? 0) }}</td>
+                            <td>{{ Helper::rupiah(($employee->variableAllowance->perjam ?? 0) * 182) }}</td>
                             <td class="d-flex">
-                                <a href="{{ url()->to('/gaji-pegawai/tunjangan/tidak-tetap/207/show') }}"
+                                <a href="{{ url()->to("/gaji-pegawai/tunjangan/tidak-tetap/$employee->nip/show") }}"
                                     class="btn btn-success btn-xs  btn-action mr-1 mt-3" title="Lihat Detail Perjam"><i
                                         class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ url()->to('/gaji-pegawai/tunjangan/tidak-tetap/207/edit') }}" class="btn btn-primary btn-xs btn-action mr-1 mt-3"
+                                <a href="{{ url()->to("/gaji-pegawai/tunjangan/tidak-tetap/$employee->nip/edit") }}" class="btn btn-primary btn-xs btn-action mr-1 mt-3"
                                     title="Edit"><i class="fas fa-edit"></i>
                                 </a>
-                                <a href="delete.php?id=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1 mt-3"
+                                <a href="{{ url()->to("/gaji-pegawai/tunjangan/tidak-tetap/$employee->nip/remove") }}" class="btn btn-danger btn-xs delete-data mr-1 mt-3"
                                     title="Hapus"><i class="fas fa-trash-alt"></i>
                                 </a>
                             </td>
                         </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8">Data Kosong</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -71,14 +78,18 @@
                             </button>
                         </div>
 
-                        <form id="perjam" action="" method="POST">
+                        <form action="{{ url()->to("gaji-pegawai/tunjangan/tidak-tetap/add") }}" method="POST">
+                            @csrf
                             <div class="modal-body">
                                 <div class="section-title mt-0">Nama Karyawan </div>
                                 <div class="input-group mb-2">
-                                    <select class="form-control selectpicker" name="karyawan" title="pilih karyawan" data-live-search="true" required>
-                                        <option value="207">Karyawan 1 - IT Support</option>
-                                        <option value="208">Karyawan 2 - IT Support</option>
-                                        <option value="209">Karyawan 3 - IT Support</option>
+                                    <select class="form-control selectpicker" name="nip" title="Pilih karyawan" data-live-search="true" required>
+                                        @php
+                                            $employees = App\Models\Employee::select('nip', 'nama', 'jabatan')->get();
+                                        @endphp
+                                        @foreach ($employees as $employee)
+                                        <option value="{{$employee->nip}}">{{$employee->nama}} - {{$employee->jabatan}}</option>
+                                        @endforeach
                                     </select type="text/javascript">
                                 </div>
                                 <div class="form-group">
@@ -90,7 +101,7 @@
                                 <div class="form-group">
                                     <div class="section-title mt-0">Tunjangan Jabatan</div>
                                     <div class="input-group mb-2">
-                                        <input type="number" class="form-control" name="t_jabatan" required>
+                                        <input type="number" class="form-control" name="tunjangan_jabatan" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -155,4 +166,33 @@
 @endsection
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    @if (session()->has('error'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'warning',
+                    text: '{{ session()->get('error') }}',
+                    type: 'warning',
+                    icon: 'warning',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'success',
+                    text: '{{ session()->get('success') }}',
+                    type: 'success',
+                    icon: 'success',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
 @endpush

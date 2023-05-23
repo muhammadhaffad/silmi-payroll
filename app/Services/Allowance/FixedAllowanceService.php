@@ -189,4 +189,212 @@ class FixedAllowanceService
             'data' => $allowance
         ];
     }
+    public function show($nip, $tunjangan, $id)
+    {
+        if ($tunjangan == 'keahlian')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => ExpertiseAllowance::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'kepala-keluarga')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => HouseholdAllowance::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'masa-kerja')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => SeniorityAllowance::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'reward')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => Reward::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'lembur')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => Overtime::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'infaq')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => Infaq::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'cicilan')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => Installment::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        return [
+            'code' => 400,
+            'message' => 'Tunjangan tidak valid ngab'
+        ];
+    }
+    public function updateAllowance($nip, $tunjangan, $id, $attr)
+    {
+        $validator = Validator::make($attr, [
+            'nama' => 'sometimes|string',
+            'jumlah' => 'required|numeric'
+        ]);
+        if ($validator->fails()) {
+            return [
+                'code' => 422,
+                'message' => 'Data yang diberikan tidak valid',
+                'errros' => $validator->errors()
+            ];
+        }
+        if ($tunjangan == 'keahlian') {
+            $allowance = ExpertiseAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->nama = $attr['nama'];
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'kepala-keluarga') {
+            $allowance = HouseholdAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'masa-kerja') {
+            $allowance = SeniorityAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'reward') {
+            $allowance = Reward::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'lembur') {
+            $allowance = Overtime::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'infaq') {
+            $allowance = Infaq::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'cicilan') {
+            $allowance = Installment::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        return [
+            'code' => 400,
+            'message' => 'Tunjangan tidak valid ngab'
+        ];
+    }
+    public function deleteAllowance($nip, $tunjangan, $id)
+    {
+        if ($tunjangan == 'keahlian') {
+            $allowance = ExpertiseAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'kepala-keluarga') {
+            $allowance = HouseholdAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'masa-kerja') {
+            $allowance = SeniorityAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'reward') {
+            $allowance = Reward::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'lembur') {
+            $allowance = Overtime::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'infaq') {
+            $allowance = Infaq::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'cicilan') {
+            $allowance = Installment::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        return [
+            'code' => 400,
+            'message' => 'Tunjangan tidak valid ngab'
+        ];
+    }
 }

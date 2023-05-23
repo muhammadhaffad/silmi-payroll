@@ -1,13 +1,15 @@
 <?php
 namespace App\Services\Allowance;
 
+use App\Models\Employee;
 use App\Models\VariableAllowance;
+use Illuminate\Support\Facades\Validator;
 
 class VariableAllowanceService
 {
     public function getAllEmployeeAllowances()
     {
-        $allowances = Employee::with('variableAllowance');
+        $allowances = Employee::with('variableAllowance')->get();
         return [
             'code' => 200,
             'message' => 'Berhasil mendapatkan data',
@@ -31,7 +33,7 @@ class VariableAllowanceService
         if (VariableAllowance::where('employee_nip', $attr['nip'])->count() > 0) {
             return [
                 'code' => 400,
-                'message' => 'Karyawan sudah mempunyai tunjangan'
+                'message' => 'Karyawan sudah mempunyai tunjangan tidak tetap, silahkan gunakan fitur Edit'
             ];
         }
         $allowance = VariableAllowance::create([
@@ -41,9 +43,17 @@ class VariableAllowanceService
             'perjam' => ((int)$attr['gaji_pokok'] + (int)$attr['tunjangan_jabatan']) / 182 /* TODO: make trigger for this */
         ]);
         return [
-            'code' => 200,
+            'code' => 201,
             'message' => 'Tunjangan berhasil ditambah',
             'data' => $allowance
+        ];
+    }
+    public function show($nip)
+    {
+        return [
+            'code' => 200,
+            'message' => 'Data berhasil didapatkan',
+            'data' => VariableAllowance::where('employee_nip', $nip)->first()
         ];
     }
     public function updateAllowance($nip, $attr)
@@ -59,7 +69,7 @@ class VariableAllowanceService
                 'errors' => $validator->errors()
             ];
         }
-        $allowance = VariableAllowance::where('nip', $nip)->first();
+        $allowance = VariableAllowance::where('employee_nip', $nip)->first();
         $allowance->gaji_pokok = $attr['gaji_pokok'];
         $allowance->tunjangan_jabatan = $attr['tunjangan_jabatan'];
         $allowance->perjam = ((int)$attr['gaji_pokok'] + (int)$attr['tunjangan_jabatan']) / 182; /* TODO: make triggers for this */

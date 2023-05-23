@@ -3,7 +3,9 @@
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FixedAllowanceController;
+use App\Http\Controllers\TestExcelController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VariableAllowanceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,46 +80,16 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('tetap', [FixedAllowanceController::class, 'index']);
         Route::post('tetap/add', [FixedAllowanceController::class, 'addAllowance']);
         Route::get('tetap/{nip}/show', [FixedAllowanceController::class, 'show']);
-        Route::get('tetap/{nip}/{tunjangan}/{id}/edit', function ($nip, $tunjangan, $id) {
-            switch ($tunjangan) {
-                case 'keahlian':
-                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Keahlian']);
-                    break;
-                case 'kepala-keluarga':
-                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Kepala Keluarga']);
-                    break;
-                case 'masa-kerja':
-                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Masa Kerja']);
-                    break;
-                case 'reward':
-                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Reward']);
-                    break;
-                case 'lembur':
-                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Tunjangan Lembur']);
-                    break;
-                case 'infaq':
-                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Infaq']);
-                    break;
-                case 'cicilan':
-                    return view('gaji-pegawai.tunjangan-tetap.edit', ['tunjangan' => 'Cicilan']);
-                    break;
-                default:
-                    return abort(404);
-                    break;
-            }
-        });
-        Route::get('tidak-tetap', function () {
-            return view('gaji-pegawai.tunjangan-tidak-tetap.index');
-        });
-        Route::get('tidak-tetap/add', function () {
-            return 'Tunjangan tidak tetap tambah';
-        });
+        Route::get('tetap/{nip}/{tunjangan}/{id}/edit', [FixedAllowanceController::class, 'edit']);
+        Route::put('tetap/{nip}/{tunjangan}/{id}/update', [FixedAllowanceController::class, 'update']);
+        Route::post('tetap/{nip}/{tunjangan}/{id}/remove', [FixedAllowanceController::class, 'remove']);
+        Route::get('tidak-tetap', [VariableAllowanceController::class, 'index']);
+        Route::post('tidak-tetap/add', [VariableAllowanceController::class, 'addAllowance']);
         Route::get('tidak-tetap/{nip}/show', function ($nip) {
             return view('gaji-pegawai.tunjangan-tidak-tetap.show');
         });
-        Route::get('tidak-tetap/{nip}/edit', function ($nip) {
-            return view('gaji-pegawai.tunjangan-tidak-tetap.edit');
-        });
+        Route::put('tidak-tetap/{nip}/update', [VariableAllowanceController::class, 'update']);
+        Route::get('tidak-tetap/{nip}/edit', [VariableAllowanceController::class, 'edit']);
         Route::get('tidak-tetap/{nip}/remove', function ($nip) {
             return 'Tunjangan tidak tetap hapus ' . $nip;
         });
@@ -141,3 +113,4 @@ Route::prefix('/gaji-pegawai')->group(function () {
         return view('gaji-pegawai.laporan.index');
     });
 });
+Route::get('test-export', [TestExcelController::class, 'export']);

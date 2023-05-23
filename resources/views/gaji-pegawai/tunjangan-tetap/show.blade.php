@@ -1,4 +1,7 @@
 @extends('gaji-pegawai.layout.app', ['title' => 'Tunjangan Tetap'])
+@push('style')
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
+@endpush
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header bg-primary py-3">
@@ -14,10 +17,11 @@
                     <span class="d-block" style="font-size:15pt">Jabatan : {{ $allowance->jabatan }}</span>
                 </div>
                 <div>
-                    <span class="d-block font-weight-bold" style='font-size:15pt'>Tunjangan (T. Keahlian, T. Kepala Keluarga, T. Masa Kerja)</span>
+                    <span class="d-block font-weight-bold" style='font-size:15pt'>Tunjangan (T. Keahlian, T. Kepala
+                        Keluarga, T. Masa Kerja)</span>
                     <span class="d-block text-success" style="font-size:15pt">
                         @php
-                            $total = $allowance->expertise_allowances_sum_jumlah + $allowance->household_allowances_sum_jumlah + $allowance->seniority_allowances_sum_jumlah
+                            $total = $allowance->expertise_allowances_sum_jumlah + $allowance->household_allowances_sum_jumlah + $allowance->seniority_allowances_sum_jumlah;
                         @endphp
                         {{ Helper::rupiah($total) }}
                     </span>
@@ -41,7 +45,7 @@
                 </div>
             </div>
 
-            <h4>Tunjangan Kehalian</h4>
+            <h4>Tunjangan Keahlian</h4>
             <div class="modal-dialog mw-100" role="document" id="keahlian-form">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -51,13 +55,16 @@
                         </button>
                     </div>
                     <div class="modal-body" style="width: 100%;">
-                        <form action="index.php" method="POST">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
                             <div class="control-group after-add-more" id="dynamic_field">
                                 <div class="control-group after-add-more" id="dynamic_field">
+                                    <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                    <input type="hidden" name="tunjangan" value="keahlian">
                                     <label>Tunjangan Keahlian</label>
-                                    <input type="text" name="tunjungankeahlian[]" class="form-control" required>
+                                    <input type="text" name="nama[]" class="form-control" required>
                                     <label>Jumlah Tunjangan</label>
-                                    <input type="text" name="jmlh_tunjangan[]" class="form-control" required>
+                                    <input type="text" name="jumlah[]" class="form-control" required>
                                 </div>
                             </div>
                             <div class="modal-footer mt-3">
@@ -85,22 +92,33 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $expertiseAllowance->nama }}</td>
                                 <td>{{ Helper::rupiah($expertiseAllowance->jumlah) }}</td>
-                                <td>
+                                <td class="d-flex">
                                     <button class="keahlian btn btn-success btn-action btn-xs mr-1">
                                         <i class="fas fa-plus"></i>
                                     </button>
-                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/keahlian/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/keahlian/$expertiseAllowance->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="deletedetail.php?idkeahlian=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1" id="hapus" title="hapus">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/keahlian/$expertiseAllowance->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" align="center">
+                                <td colspan="3" align="center">
                                     Data kosong
+                                </td>
+                                <td>
+                                    <button class="keahlian btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @endforelse
@@ -127,17 +145,19 @@
                         </button>
                     </div>
                     <div class="modal-body" style="width: 100%;">
-                        <form action="" method="POST">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
                             <div class="form-group">
+                                <input type="hidden" name="tunjangan" value="kepala-keluarga">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
                                 <div class="section-title mt-0">Jumlah</div>
                                 <div class="input-group mb-2">
-                                    <input type="number" class="form-control" name="jmlh_tunjangan" required>
+                                    <input type="number" class="form-control" name="jumlah[]" required>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
                                 <button class="btn btn-primary mr-1" type="submit" name="submit2">Simpan</button>
-
                                 <button type="button" class="btn btn-danger" data-dismiss="modal"
                                     id="send2">Close</button>
                             </div>
@@ -161,22 +181,33 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $householdAllowance->nama }}</td>
                                 <td>{{ Helper::rupiah($householdAllowance->jumlah) }}</td>
-                                <td>
+                                <td class="d-flex">
                                     <button class="kepala-keluarga btn btn-success btn-action btn-xs mr-1">
                                         <i class="fas fa-plus"></i>
                                     </button>
-                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/keahlian/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/kepala-keluarga/$householdAllowance->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="deletedetail.php?idkeahlian=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1" id="hapus" title="hapus">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/kepala-keluarga/$householdAllowance->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" align="center">
+                                <td colspan="3" align="center">
                                     Data kosong
+                                </td>
+                                <td>
+                                    <button class="kepala-keluarga btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @endforelse
@@ -204,11 +235,14 @@
                         </button>
                     </div>
                     <div class="modal-body" style="width: 100%;">
-                        <form action="" method="POST">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
                             <div class="form-group">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                <input type="hidden" name="tunjangan" value="masa-kerja">
                                 <div class="section-title mt-0">Jumlah Tunjangan Masa Kerja</div>
                                 <div class="input-group mb-2">
-                                    <input type="number" class="form-control" name="jmlh_tunjangan" required>
+                                    <input type="number" class="form-control" name="jumlah[]" required>
                                 </div>
                             </div>
 
@@ -239,22 +273,33 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $seniorityAllowance->nama }}</td>
                                 <td>{{ Helper::rupiah($seniorityAllowance->jumlah) }}</td>
-                                <td>
+                                <td class="d-flex">
                                     <button class="masa-kerja btn btn-success btn-action btn-xs mr-1">
                                         <i class="fas fa-plus"></i>
                                     </button>
-                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/keahlian/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/masa-kerja/$seniorityAllowance->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="deletedetail.php?idkeahlian=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1" id="hapus" title="hapus">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/masa-kerja/$seniorityAllowance->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" align="center">
+                                <td colspan="3" align="center">
                                     Data kosong
+                                </td>
+                                <td>
+                                    <button class="masa-kerja btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @endforelse
@@ -276,15 +321,18 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" id="exampleModalLabel4" class="close btn-danger" data-dismiss="modal"
-                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
+                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                     <div class="modal-body" style="width: 100%;">
-                        <form action="" method="POST">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
                             <div class="form-group">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                <input type="hidden" name="tunjangan" value="reward">
                                 <div class="section-title mt-0">Jumlah Reward</div>
                                 <div class="input-group mb-2">
-                                    <input type="number" class="form-control" name="jmlh_tunjangan" required>
+                                    <input type="number" class="form-control" name="jumlah[]" required>
                                 </div>
                             </div>
 
@@ -309,21 +357,41 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Reward</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <button class="reward btn btn-success btn-action btn-xs mr-1" id="tampil4"><i
-                                        class="fas fa-plus"></i></button>
-    
-                                <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/reward/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1"
-                                    title="Edit"><i class="fas fa-edit"></i></a>
-    
-                                <a href="deletedetail.php?idreward=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1"
-                                    title="hapus"><i class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
+                        @forelse ($allowance->rewards as $reward)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $reward->nama }}</td>
+                                <td>{{ Helper::rupiah($reward->jumlah) }}</td>
+                                <td class="d-flex">
+                                    <button class="reward btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/reward/$reward->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/reward/$reward->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" align="center">
+                                    Data kosong
+                                </td>
+                                <td>
+                                    <button class="reward btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
@@ -331,7 +399,7 @@
                                 Total Keseluruhan
                             </td>
                             <td colspan="2" class="text-right text-success">
-                                {{ Helper::rupiah(200000) }}</td>
+                                {{ Helper::rupiah($allowance->rewards_sum_jumlah) }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -341,21 +409,23 @@
             <div class="modal-dialog mw-100" role="document" id="lembur-form">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" id="exampleModalLabel5" class="close btn-danger"
-                            data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                        <button type="button" id="exampleModalLabel5" class="close btn-danger" data-dismiss="modal"
+                            aria-label="Close"><span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body" style="width: 100%;">
-                        <form action="" method="POST">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
                             <div class="form-group">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                <input type="hidden" name="tunjangan" value="lembur">
                                 <div class="section-title mt-0">Jumlah</div>
                                 <div class="input-group mb-2">
-                                    <input type="number" class="form-control" name="jmlh" required>
+                                    <input type="number" class="form-control" name="jumlah[]" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-primary mr-1" type="submit"
-                                    name="submit5">Simpan</button>
+                                <button class="btn btn-primary mr-1" type="submit" name="submit5">Simpan</button>
                                 <button type="button" class="btn btn-danger" data-dismiss="modal"
                                     id="send5">Close</button>
                             </div>
@@ -373,23 +443,43 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-    
+
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Lembur</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <button class="lembur btn btn-success btn-action btn-xs mr-1" id="tampil5"><i
-                                        class="fas fa-plus"></i></button>
-    
-                                <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/lembur/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1"
-                                    title="Edit"><i class="fas fa-edit"></i></a>
-    
-                                <a href="deletedetail.php?idlembur=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1"
-                                    title="hapus"><i class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
+                        @forelse ($allowance->overtimes as $overtime)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $overtime->nama }}</td>
+                                <td>{{ Helper::rupiah($overtime->jumlah) }}</td>
+                                <td class="d-flex">
+                                    <button class="lembur btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/lembur/$overtime->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/lembur/$overtime->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" align="center">
+                                    Data kosong
+                                </td>
+                                <td>
+                                    <button class="lembur btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
@@ -397,7 +487,7 @@
                                 Total Keseluruhan
                             </td>
                             <td colspan="2" class="text-right text-success">
-                                {{ Helper::rupiah(200000) }}
+                                {{ Helper::rupiah($allowance->overtimes_sum_jumlah) }}
                             </td>
                         </tr>
                     </tfoot>
@@ -408,25 +498,24 @@
             <div class="modal-dialog mw-100" role="document" id="infaq-form">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" id="exampleModalLabel6" class="close btn-danger"
-                            data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                        <button type="button" id="exampleModalLabel6" class="close btn-danger" data-dismiss="modal"
+                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
                     </div>
                     <div class="modal-body" style="width: 100%;">
-                        <form action="" method="POST">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
                             <div class="form-group">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                <input type="hidden" name="tunjangan" value="infaq">
                                 <div class="section-title mt-0">Jumlah Infaq</div>
                                 <div class="input-group mb-2">
-                                    <input type="number" class="form-control" name="jmlh_infaq" required>
+                                    <input type="number" class="form-control" name="jumlah[]" required>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
-                                <button class="btn btn-primary mr-1" type="submit"
-                                    name="submit6">Simpan</button>
-
-
+                                <button class="btn btn-primary mr-1" type="submit" name="submit6">Simpan</button>
                                 <button type="button" class="btn btn-danger" data-dismiss="modal"
                                     id="send6">Close</button>
                             </div>
@@ -444,23 +533,43 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-    
+
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Infaq</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <button class="infaq btn btn-success btn-action btn-xs mr-1" id="tampil6"><i
-                                        class="fas fa-plus"></i></button>
-    
-                                <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/infaq/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1"
-                                    title="Edit"><i class="fas fa-edit"></i></a>
-    
-                                <a href="deletedetail.php?idinfaq=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1"
-                                    title="hapus"><i class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
+                        @forelse ($allowance->infaqs as $infaq)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $infaq->nama }}</td>
+                                <td>{{ Helper::rupiah($infaq->jumlah) }}</td>
+                                <td class="d-flex">
+                                    <button class="infaq btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/infaq/$infaq->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/infaq/$infaq->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" align="center">
+                                    Data kosong
+                                </td>
+                                <td>
+                                    <button class="infaq btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
@@ -468,7 +577,7 @@
                                 Total Keseluruhan
                             </td>
                             <td colspan="2" class="text-right text-danger">
-                                {{ Helper::rupiah(200000) }}
+                                {{ Helper::rupiah($allowance->infaqs_sum_jumlah) }}
                             </td>
                         </tr>
                     </tfoot>
@@ -479,23 +588,24 @@
             <div class="modal-dialog mw-100" role="document" id="cicilan-form">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" id="exampleModalLabel7" class="close btn-danger"
-                            data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                        <button type="button" id="exampleModalLabel7" class="close btn-danger" data-dismiss="modal"
+                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
                     </div>
                     <div class="modal-body" style="width: 100%;">
-                        <form action="" method="POST">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
                             <div class="form-group">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                <input type="hidden" name="tunjangan" value="cicilan">
                                 <div class="section-title mt-0">Jumlah Cicilan</div>
                                 <div class="input-group mb-2">
-                                    <input type="number" class="form-control" name="jmlh_cicilan" required>
+                                    <input type="number" class="form-control" name="jumlah[]" required>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
-                                <button class="btn btn-primary mr-1" type="submit"
-                                    name="submit7">Simpan</button>
+                                <button class="btn btn-primary mr-1" type="submit" name="submit7">Simpan</button>
 
                                 <button type="button" class="btn btn-danger" data-dismiss="modal"
                                     id="send7">Close</button>
@@ -514,23 +624,43 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-    
+
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Cicilan</td>
-                            <td>{{ Helper::rupiah(200000) }}</td>
-                            <td>
-                                <button class="cicilan btn btn-success btn-action btn-xs mr-1" id="tampil7"><i
-                                        class="fas fa-plus"></i></button>
-    
-                                <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/207/cicilan/1/edit") }}" class="btn btn-primary btn-xs btn-action mr-1"
-                                    title="Edit"><i class="fas fa-edit"></i></a>
-    
-                                <a href="deletedetail.php?idcicilan=<?= '' ?>" class="btn btn-danger btn-xs delete-data mr-1"
-                                    title="hapus"><i class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
+                        @forelse ($allowance->installments as $installment)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $installment->nama }}</td>
+                                <td>{{ Helper::rupiah($installment->jumlah) }}</td>
+                                <td class="d-flex">
+                                    <button class="cicilan btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/cicilan/$installment->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/cicilan/$installment->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" align="center">
+                                    Data kosong
+                                </td>
+                                <td>
+                                    <button class="cicilan btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
@@ -538,7 +668,7 @@
                                 Total Keseluruhan
                             </td>
                             <td colspan="2" class="text-right text-danger">
-                                {{ Helper::rupiah(200000) }}
+                                {{ Helper::rupiah($allowance->installments_sum_jumlah) }}
                             </td>
                         </tr>
                     </tfoot>
@@ -548,6 +678,7 @@
     </div>
 @endsection
 @push('script')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(() => {
             $('#keahlian-form').hide();
@@ -601,4 +732,32 @@
             });
         })
     </script>
+    @if (session()->has('error'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'warning',
+                    text: '{{ session()->get('error') }}',
+                    type: 'warning',
+                    icon: 'warning',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script type='text/javascript'>
+            setTimeout(function() {
+                swal({
+                    title: 'success',
+                    text: '{{ session()->get('success') }}',
+                    type: 'success',
+                    icon: 'success',
+                    timer: 3000,
+                    buttons: false
+                });
+            }, 10);
+        </script>
+    @endif
 @endpush
