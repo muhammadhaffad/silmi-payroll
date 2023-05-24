@@ -2,10 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
@@ -58,6 +55,7 @@ class UserExport implements FromCollection, WithStyles, WithCustomStartCell
         $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('A2')->getFont()->setBold(true);
         $sheet->setCellValue('A4', "Detail");
+        $sheet->getStyle('A4')->getFont()->setBold(true);
         $sheet->setCellValue('A5', "Tanggal Cetak : " . date('Y-m-d'));
         $sheet->setCellValue('A6', "Periode : $this->month $this->year");
         $sheet->mergeCells('A1:O1', Worksheet::MERGE_CELL_CONTENT_MERGE);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FixedAllowanceController;
+use App\Http\Controllers\OvertimeRewardInstallmentController;
 use App\Http\Controllers\TestExcelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VariableAllowanceController;
@@ -65,18 +66,13 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::get('lembur-sales/{nip}/remove', function ($nip) {
             return 'Lembur Sales '.$nip.' hapus';
         });
-        Route::get('lembur-reward-cicilan', function () {
-            return view('gaji-pegawai.lembur-reward-cicilan.index');
-        });
-        Route::get('lembur-reward-cicilan/upload-excel', function () {
-            return 'Lembur reward Cicilan upload excel';
-        });
-        Route::get('lembur-reward-cicilan/{nip}/edit', function ($nip) {
+        Route::get('lembur-reward-cicilan', [OvertimeRewardInstallmentController::class, 'index']);
+        Route::post('lembur-reward-cicilan/upload-excel', [OvertimeRewardInstallmentController::class, 'uploadData']);
+        /* Route::get('lembur-reward-cicilan/{nip}/edit', function ($nip) {
             return view('gaji-pegawai.lembur-reward-cicilan.edit');
-        });
-        Route::get('lembur-reward-cicilan/{nip}/remove', function ($nip) {
-            return 'Lembur reward Cicilan hapus ' . $nip;
-        });
+        }); */
+        Route::post('lembur-reward-cicilan/{nip}/remove', [OvertimeRewardInstallmentController::class, 'remove']);
+        Route::post('lembur-reward-cicilan/remove-all', [OvertimeRewardInstallmentController::class, 'removeAll']);
         Route::get('tetap', [FixedAllowanceController::class, 'index']);
         Route::post('tetap/add', [FixedAllowanceController::class, 'addAllowance']);
         Route::get('tetap/{nip}/show', [FixedAllowanceController::class, 'show']);
@@ -89,9 +85,8 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::post('tidak-tetap/upload', [VariableAllowanceController::class, 'uploadLog']);
         Route::put('tidak-tetap/{nip}/update', [VariableAllowanceController::class, 'update']);
         Route::get('tidak-tetap/{nip}/edit', [VariableAllowanceController::class, 'edit']);
-        Route::get('tidak-tetap/{nip}/remove', function ($nip) {
-            return 'Tunjangan tidak tetap hapus ' . $nip;
-        });
+        Route::get('tidak-tetap/{nip}/print', [VariableAllowanceController::class, 'downloadLog']);
+        Route::post('tidak-tetap/{nip}/remove', [VariableAllowanceController::class, 'remove']);
 
     });
     Route::get('kartu-cicilan', function () {

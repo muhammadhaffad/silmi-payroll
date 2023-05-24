@@ -58,9 +58,12 @@
                                 <a href="{{ url()->to("/gaji-pegawai/tunjangan/tidak-tetap/$employee->nip/edit") }}" class="btn btn-primary btn-xs btn-action mr-1 mt-3"
                                     title="Edit"><i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{{ url()->to("/gaji-pegawai/tunjangan/tidak-tetap/$employee->nip/remove") }}" class="btn btn-danger btn-xs delete-data mr-1 mt-3"
-                                    title="Hapus"><i class="fas fa-trash-alt"></i>
-                                </a>
+                                <form action="{{ url()->to("/gaji-pegawai/tunjangan/tidak-tetap/$employee->nip/remove") }}" method="post" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    @csrf
+                                    <button class="btn btn-danger btn-xs delete-data mr-1 mt-3"
+                                        title="Hapus"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @empty

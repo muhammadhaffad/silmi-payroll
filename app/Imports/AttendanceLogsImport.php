@@ -50,4 +50,8 @@ class AttendanceLogsImport implements ToModel, WithHeadingRow
             'total_jam' => $workHours / 3600,
         ]);
     }
+    public function headingRow() : int
+    {
+        return 2;
+    }
 }

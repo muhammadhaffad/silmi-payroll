@@ -29,6 +29,32 @@ class FixedAllowanceService
             'data' => $allowances
         ];
     }
+    public function getAllEmployeeSomeAllowances($relations)
+    {
+        $employees = Employee::query();
+        foreach ($relations as $relation) {
+            $employees->withSum($relation, 'jumlah');
+        }
+        $employees = $employees->get();
+        return [
+            'code' => 200,
+            'message' => 'Berhasil mendapatkan data',
+            'data' => $employees
+        ];
+    }
+    /* public function getEmployeeSomeAllowances($nip, $relations)
+    {
+        $employee = Employee::where('nip', $nip)->first();
+        foreach ($relations as $relation) {
+            $employee->with($relation);
+        }
+        $employees = $employees->get();
+        return [
+            'code' => 200,
+            'message' => 'Berhasil mendapatkan data',
+            'data' => $employees
+        ];
+    } */
     public function addAllowance($attr)
     {
         $validator = Validator::make($attr, [
@@ -247,7 +273,7 @@ class FixedAllowanceService
         if ($validator->fails()) {
             return [
                 'code' => 422,
-                'message' => 'Data yang diberikan tidak valid',
+                'message' => "Data $tunjangan yang diberikan tidak valid",
                 'errros' => $validator->errors()
             ];
         }
@@ -395,6 +421,28 @@ class FixedAllowanceService
         return [
             'code' => 400,
             'message' => 'Tunjangan tidak valid ngab'
+        ];
+    }
+    public function deleteSomeAllowances($nip, $relations)
+    {
+        $employee = Employee::where('nip', $nip)->first();
+        foreach ($relations as $realtion) {
+            $employee->{$realtion}()->delete();
+        }
+        return [
+            'code' => 204,
+            'message' => 'Data berhasil dihapus'
+        ];
+    }
+    public function deleteAllEmployeeSomeAllowances($models)
+    {
+        foreach ($models as $model) {
+            $class = "App\Models\\$model";
+            $class::whereNull('deleted_at')->delete();
+        }
+        return [
+            'code' => 204,
+            'message' => 'Semua Data berhasil dihapus'
         ];
     }
 }

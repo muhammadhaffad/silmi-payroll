@@ -4,14 +4,14 @@
         <div class="card-header py-3 d-flex justify-content-between">
             <div>
                 @php
-                    $employee = App\Models\Employee::where('nip', $nip)->first();
+                    $employee = App\Models\Employee::where('nip', $nip)->first()->load('variableAllowance');
                 @endphp
                 <span class="d-block" style='font-size:20pt'><b>Detail Karyawan</b></span>
                 <span class="d-block" style="font-size:15pt">Nama Karyawan : {{$employee->nama}}</span>
                 <span class="d-block" style="font-size:15pt">Jabatan : {{$employee->jabatan}}</span>    
             </div>
             <div class="card-header-action text-right">
-                <a href="cetak.php?id=207" class="btn btn-primary btn-action btn-xs mr-1"
+                <a href="{{ url()->to("gaji-pegawai/tunjangan/tidak-tetap/$nip/print") }}" class="btn btn-primary btn-action btn-xs mr-1"
                     title="CETAK"><i class="fas fa-print"></i>
                     <span> &nbsp; CETAK </span>
                 </a>
@@ -44,7 +44,7 @@
                                 <td>{{$attendance->scan_2}}</td>
                                 <td>{{$attendance->scan_3}}</td>
                                 <td>{{$attendance->scan_4}}</td>
-                                <td>{{$attendance->total_jam}}</td>
+                                <td>{{Helper::rupiah($attendance->total_jam * $employee->variableAllowance->perjam)}}</td>
                             </tr>
                         @empty
                             
@@ -55,7 +55,7 @@
                             <td>
                                 Total Keseluruhan
                             </td>
-                            <td colspan="7" class="text-success text-right">{{ $attendances->sum('total_jam') }} Jam</td>
+                            <td colspan="7" class="text-success text-right">{{ Helper::rupiah($attendances->sum('total_jam') * $employee->variableAllowance->perjam) }}</td>
                         </tr>
                     </tfoot>
                 </table>

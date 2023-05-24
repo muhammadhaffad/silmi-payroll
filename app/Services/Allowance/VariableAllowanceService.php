@@ -11,7 +11,7 @@ class VariableAllowanceService
     public function getAllEmployeeAllowances()
     {
         $allowances = Employee::with('variableAllowance')->withSum(
-            ['attendanceLogs' => fn ($query) => $query->where('tanggal_expired', '>=', date('Y-m-d'))], 
+            ['attendanceLogs' => function ($query) {return $query->where('tanggal_expired', '>=', date('Y-m-d'));}], 
             'total_jam'
         )->get();
         return [
@@ -60,6 +60,17 @@ class VariableAllowanceService
             'data' => VariableAllowance::where('employee_nip', $nip)->first()
         ];
     }
+    public function delete($nip)
+    {
+        $variableAllowance = VariableAllowance::where('employee_nip', $nip)->first();
+        if ($variableAllowance->delete()) 
+        {
+            return [
+                'code' => 204,
+                'message' => 'Data berhasil dihapus'
+            ];
+        }
+    }
     public function updateAllowance($nip, $attr)
     {
         $validator = Validator::make($attr, [
@@ -95,6 +106,15 @@ class VariableAllowanceService
             'code' => 200,
             'message' => 'Berhasil mendapatkan data',
             'data' => $logs
+        ];
+    }
+    public function printPresence($nip)
+    {
+        $logs = AttendanceLog::where('employee_nip', $nip)->where('tanggal_expired', '>=', date('Y-m-d'))->get(['tanggal', 'total_jam']);
+        $employee = Employee::where('nip', $nip)->first()->load('variableAllowance');
+        return [
+            'logs' => $logs,
+            'employee' => $employee
         ];
     }
 }
