@@ -57,12 +57,12 @@ class AttendanceLogExport implements FromCollection, WithStyles, WithCustomStart
         $sheet->getRowDimension(6)->setRowHeight(20);
         $sheet->getStyle('A6:E6')->getFont()->setBold(true);
         $total = 0;
+        $key = 0;
         foreach ($this->data['logs'] as $key => $log) {
             $sheet->setCellValue("A".$key+7, $key+1);
             $sheet->setCellValue("B".$key+7, $log->tanggal);
             $sheet->setCellValue("C".$key+7, Helper::rupiah($this->data['employee']->variableAllowance->perjam));
-            $sheet->setCellValue("D".$key+7, $log->total_jam);
-            $sheet->getStyle("D".$key+7)->getNumberFormat()->setFormatCode('0.000" Jam"');
+            $sheet->setCellValue("D".$key+7, number_format($log->total_jam, 3, ',', '.') . ' Jam');
             $sheet->setCellValue("E".$key+7, Helper::rupiah($this->data['employee']->variableAllowance->perjam * $log->total_jam));
             $total += $this->data['employee']->variableAllowance->perjam * $log->total_jam;
         }

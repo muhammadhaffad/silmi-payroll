@@ -132,8 +132,12 @@
                 </div>
 
                 <div class="card-body">
+                    @if ($annualSalary->pluck('jumlah')->toArray())
                     <canvas id="chartGajiPerdevisi"></canvas>
-                    <input id="data-gaji-perdevisi" type="hidden" value="{{ '[40000000, 60000000, 39000000, 150000000, 39000000, 10000000]' }}">
+                    <input id="data-gaji-perdevisi" type="hidden" value="{{ json_encode($annualSalary->pluck('jumlah')->toArray()) }}">
+                    @else
+                    <span>Tidak ada laporan pada tahun {{ request()->tahun }}</span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -159,12 +163,12 @@
                             <div class="dropdown-header">Devisi</div>
                             <a class="dropdown-item" href="">Tampilkan Semua</a>
                             @php
-                                $devisions = ['Manajemen', 'MARKOM', 'PRODUKSI', 'RND', 'SALES', 'TOKO'];
+                                $devisions = App\Models\Devision::all();
                             @endphp
                             @foreach ($devisions as $devision)
                                 <form action="" method="get">
-                                    <button class="dropdown-item" type="submit" name="devisi"
-                                        value="{{ $devision }}" href="#">{{ $devision }}
+                                    <button class="dropdown-item" type="submit" name="devision_id"
+                                        value="{{ $devision->id }}" href="#">{{ $devision->nama }}
                                     </button>
                                 </form>    
                             @endforeach
@@ -173,19 +177,19 @@
                 </div>
                 <div class="card-body" id="hasil">
                     <canvas id="chartJumlahGender"></canvas>
-                    <input type="hidden" id="data-jumlah-gender" value="{{ '[17, 31]' }}">
+                    <input type="hidden" id="data-jumlah-gender" value="{{ json_encode($gender->pluck('jumlah')->toArray()) }}">
                     <span class="text-bold"> 
                         <i class="fas fa-male"></i>
-                        Laki - Laki : 17
+                        Laki - Laki : {{ $gender[0]['jumlah'] }}
                     </span>
                     <br>
                     <span> 
                         <i class="fas fa-female"></i> 
-                        Perempuan : 31
+                        Perempuan : {{ $gender[1]['jumlah'] }}
                     </span>
                     <br><br>
                     <span class="text-bold"> 
-                        Total : 48
+                        Total : {{ $gender[0]['jumlah'] + $gender[1]['jumlah'] }}
                     </span>
                 </div>
             </div>
@@ -216,18 +220,20 @@
                     </thead>
 
                     <tbody>
+                        @forelse ($employees as $employee)
+                        @if ($employee->status)
                         <tr>
                             @php
-                                $diffDate = Carbon\Carbon::parse('2023-04-25')->diff(Carbon\Carbon::now());
+                                $diffDate = Carbon\Carbon::parse($employee->tanggal_masuk)->diff(Carbon\Carbon::now());
                                 $year = $diffDate->format('%y');
                                 $month = $diffDate->format('%m');
                                 $day = $diffDate->format('%d');
                             @endphp
-                            <td>1</td>
-                            <td>207</td>
-                            <td>Karyawan 1</td>
-                            <td>IT Support</td>
-                            <td>{{ Carbon\Carbon::parse('2023-04-25')->format('Y-m-d') }}</td>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $employee->nip }}</td>
+                            <td>{{ $employee->nama }}</td>
+                            <td>{{ $employee->jabatan }}</td>
+                            <td>{{ Carbon\Carbon::parse($employee->tanggal_masuk)->format('Y-m-d') }}</td>
                             <td>
                                 {{ "$year Tahun, $month Bulan, $day Hari" }}
                             </td>
@@ -235,6 +241,8 @@
                                 <span>
                                     @if ($year >= 1)
                                         Karyawan Tetap
+                                    @elseif ($year < 1 && $month <= 3)
+                                        Karyawan Training
                                     @else
                                         Karyawan Kontrak
                                     @endif
@@ -262,7 +270,15 @@
                                     </span>
                                 @endif
                             </td>
+                        </tr> 
+                        @endif
+                        @empty
+                        <tr>
+                            <td colspan="9">
+                                <span>Data Kosong</span>
+                            </td>
                         </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -286,9 +302,8 @@
         const chartGajiPerdevisi = new Chart(document.getElementById("chartGajiPerdevisi").getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ["SALES", "MANAJEMEN", "RND", "PRODUKSI", 'MARKOM', 'TOKO'],
+                labels: ["MANAJEMEN", "MARKOM", "PRODUKSI", "RND", 'SALES', 'TOKO'],
                 datasets: [{
-                    label: 'Data Gaji Karyawan Per Devisi',
                     data: dataGajiPerdevisi,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',

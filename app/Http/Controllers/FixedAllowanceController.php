@@ -49,6 +49,12 @@ class FixedAllowanceController extends Controller
             case 'masa-kerja':
                 return view('gaji-pegawai.tunjangan-tetap.edit', [ 'nip'=> $nip, 'tunjangan' => $tunjangan, 'id' => $id, 'title' => 'Tunjangan Masa Kerja', 'data' => $result['data']]);
                 break;
+            case 'operasional':
+                return view('gaji-pegawai.tunjangan-tetap.edit', [ 'nip'=> $nip, 'tunjangan' => $tunjangan, 'id' => $id, 'title' => 'Tunjangan Operasional', 'data' => $result['data']]);
+                break;
+            case 'lain-lain':
+                return view('gaji-pegawai.tunjangan-tetap.edit', [ 'nip'=> $nip, 'tunjangan' => $tunjangan, 'id' => $id, 'title' => 'Tunjangan Lain-lain', 'data' => $result['data']]);
+                break;
             case 'reward':
                 return view('gaji-pegawai.tunjangan-tetap.edit', [ 'nip'=> $nip, 'tunjangan' => $tunjangan, 'id' => $id, 'title' => 'Tunjangan Reward', 'data' => $result['data']]);
                 break;

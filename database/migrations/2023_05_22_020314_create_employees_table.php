@@ -16,11 +16,15 @@ return new class extends Migration
         Schema::enableForeignKeyConstraints();
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('devision_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->unsignedBigInteger('nip')->unique();
             $table->string('nama');
             $table->string('jenis_kelamin');
             $table->date('tanggal_lahir');
-            $table->string('devisi');
             $table->string('jabatan');
             $table->date('tanggal_masuk');
             $table->text('alamat');

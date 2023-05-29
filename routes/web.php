@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FixedAllowanceController;
+use App\Http\Controllers\MigrateDatabase;
 use App\Http\Controllers\OvertimeRewardInstallmentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\TestExcelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VariableAllowanceController;
@@ -21,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('gaji-pegawai/dashboard');
 });
 
 Route::get('/auth', function() {
@@ -32,9 +37,7 @@ Route::get('/home', function() {
     return view('home.index');
 });
 Route::prefix('/gaji-pegawai')->group(function () {
-    Route::get('/dashboard', function() {
-        return view('gaji-pegawai.dashboard.index');
-    });
+    Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::prefix('/data-master')->group(function () {
         Route::get('users', [UserController::class, 'index']);
         Route::post('users/{id}/change-password', [UserController::class, 'changePassword']);
@@ -89,23 +92,23 @@ Route::prefix('/gaji-pegawai')->group(function () {
         Route::post('tidak-tetap/{nip}/remove', [VariableAllowanceController::class, 'remove']);
 
     });
-    Route::get('kartu-cicilan', function () {
-        return view('gaji-pegawai.kartu-cicilan.index');
-    });
-    Route::get('kartu-cicilan/add', function () {
-        return 'Kartu cicilan tambah';
-    });
-    Route::get('gaji', function () {
-        return view('gaji-pegawai.gaji.index');
-    });
-    Route::get('gaji/print', function () {
-        return 'Take home/gaji print';
-    });
+    Route::get('kartu-cicilan', [DebtController::class, 'index']);
+    Route::post('kartu-cicilan/add', [DebtController::class, 'addDebt']);
+    Route::post('kartu-cicilan/bayar-cicilan', [DebtController::class, 'payDebt']);
+    Route::post('kartu-cicilan/hapus-cicilan/{id}', [DebtController::class, 'removeDebtPayment']);
+    Route::post('kartu-cicilan/hapus-hutang/{id}', [DebtController::class, 'removeDebt']);
+    Route::post('kartu-cicilan/download/{id}', [DebtController::class, 'printDebt']);
+    Route::post('kartu-cicilan/download/image/{id}', [DebtController::class, 'copyDebt']);
+    Route::get('gaji', [SalaryController::class, 'index']);
+    Route::post('gaji/print/{nip}', [SalaryController::class, 'printSalaryPDF']);
+    Route::post('gaji/gambar/{nip}', [SalaryController::class, 'printSalaryImage']);
+    Route::post('gaji-perjam/gambar/{nip}', [SalaryController::class, 'printLog']);
     Route::get('akumulasi-gaji', function () {
         return view('gaji-pegawai.akumulasi.index');
     });
-    Route::get('laporan', function () {
-        return view('gaji-pegawai.laporan.index');
-    });
+    Route::get('laporan', [ReportController::class, 'index']);
+    Route::post('laporan/print-full', [ReportController::class, 'printFullReport']);
+    Route::get('laporan/make-report', [ReportController::class, 'makeReport']);
 });
 Route::get('test-export', [TestExcelController::class, 'export']);
+Route::get('migrate', [MigrateDatabase::class, 'migrate']);

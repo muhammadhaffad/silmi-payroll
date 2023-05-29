@@ -4,8 +4,9 @@
 @endpush
 @section('content')
     <div class="card shadow mb-4">
-        <div class="card-header bg-primary py-3">
+        <div class="card-header bg-primary py-3 d-flex justify-content-between">
             <h1 class="h3 mb-2 text-white"> Detail Tunjangan Tetap</h1>
+            <a href="{{ url()->to('gaji-pegawai/tunjangan/tetap') }}" class="btn btn-outline-light btn-action btn-xs mr-1" title="kembali"><span>Kembali</span></a>
         </div>
         <div class="card-body">
             <div class="d-flex justify-content-between">
@@ -69,7 +70,7 @@
                             </div>
                             <div class="modal-footer mt-3">
                                 <button class="btn btn-primary mr-1" type="submit" name="submitkeahlian">Simpan</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
                                     id="send">Close</button>
                             </div>
                         </form>
@@ -158,7 +159,7 @@
 
                             <div class="modal-footer">
                                 <button class="btn btn-primary mr-1" type="submit" name="submit2">Simpan</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
                                     id="send2">Close</button>
                             </div>
                         </form>
@@ -182,9 +183,6 @@
                                 <td>{{ $householdAllowance->nama }}</td>
                                 <td>{{ Helper::rupiah($householdAllowance->jumlah) }}</td>
                                 <td class="d-flex">
-                                    <button class="kepala-keluarga btn btn-success btn-action btn-xs mr-1">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
                                     <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/kepala-keluarga/$householdAllowance->id/edit") }}"
                                         class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -249,7 +247,7 @@
                             <div class="modal-footer">
                                 <button class="btn btn-primary mr-1" type="submit" name="submit3">Simpan</button>
 
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
                                     id="send3">Close</button>
                             </div>
                         </form>
@@ -274,9 +272,6 @@
                                 <td>{{ $seniorityAllowance->nama }}</td>
                                 <td>{{ Helper::rupiah($seniorityAllowance->jumlah) }}</td>
                                 <td class="d-flex">
-                                    <button class="masa-kerja btn btn-success btn-action btn-xs mr-1">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
                                     <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/masa-kerja/$seniorityAllowance->id/edit") }}"
                                         class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -298,6 +293,180 @@
                                 </td>
                                 <td>
                                     <button class="masa-kerja btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                Total Keseluruhan
+                            </td>
+                            <td colspan="2" class="text-success text-right">
+                                {{ Helper::rupiah($allowance->seniority_allowances_sum_jumlah) }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <h4>Tunjangan Operasional</h4>
+            <div class="modal-dialog mw-100" role="document" id="operasional-form">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" id="exampleModalLabel3" class="close btn-danger" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="width: 100%;">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                <input type="hidden" name="tunjangan" value="operasional">
+                                <div class="section-title mt-0">Jumlah Tunjangan Operasional</div>
+                                <div class="input-group mb-2">
+                                    <input type="number" class="form-control" name="jumlah[]" required>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-primary mr-1" type="submit" name="submit3">Simpan</button>
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
+                                    id="send3">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="datatable table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Tunjangan</th>
+                            <th>Jumlah Tunjangan</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse ($allowance->operationalAllowances as $operationalAllowance)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $operationalAllowance->nama }}</td>
+                                <td>{{ Helper::rupiah($operationalAllowance->jumlah) }}</td>
+                                <td class="d-flex">
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/operasional/$operationalAllowance->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/operasional/$operationalAllowance->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" align="center">
+                                    Data kosong
+                                </td>
+                                <td>
+                                    <button class="operasional btn btn-success btn-action btn-xs mr-1">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                Total Keseluruhan
+                            </td>
+                            <td colspan="2" class="text-success text-right">
+                                {{ Helper::rupiah($allowance->operational_allowances_sum_jumlah) }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <h4>Tunjangan Lain-lain</h4>
+            <div class="modal-dialog mw-100" role="document" id="lain-lain-form">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" id="exampleModalLabel3" class="close btn-danger" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="width: 100%;">
+                        <form action="{{ url()->to('gaji-pegawai/tunjangan/tetap/add') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <input type="hidden" name="nip" value="{{ $allowance->nip }}">
+                                <input type="hidden" name="tunjangan" value="lain-lain">
+                                <div class="section-title mt-0">Jumlah Tunjangan Lain-lain</div>
+                                <div class="input-group mb-2">
+                                    <input type="number" class="form-control" name="jumlah[]" required>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-primary mr-1" type="submit" name="submit3">Simpan</button>
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
+                                    id="send3">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="datatable table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Tunjangan</th>
+                            <th>Jumlah Tunjangan</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse ($allowance->etcAllowances as $etcAllowance)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $etcAllowance->nama }}</td>
+                                <td>{{ Helper::rupiah($etcAllowance->jumlah) }}</td>
+                                <td class="d-flex">
+                                    <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/lain-lain/$etcAllowance->id/edit") }}"
+                                        class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form
+                                        action="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/lain-lain/$etcAllowance->id/remove") }}"
+                                        method="post">
+                                        @csrf
+                                        <button class="btn btn-danger btn-xs delete-data mr-1">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" align="center">
+                                    Data kosong
+                                </td>
+                                <td>
+                                    <button class="lain-lain btn btn-success btn-action btn-xs mr-1">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </td>
@@ -339,7 +508,7 @@
                             <div class="modal-footer">
                                 <button class="btn btn-primary mr-1" type="submit" name="submit4">Simpan</button>
 
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
                                     id="send4">Close</button>
                             </div>
                         </form>
@@ -363,9 +532,6 @@
                                 <td>{{ $reward->nama }}</td>
                                 <td>{{ Helper::rupiah($reward->jumlah) }}</td>
                                 <td class="d-flex">
-                                    <button class="reward btn btn-success btn-action btn-xs mr-1">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
                                     <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/reward/$reward->id/edit") }}"
                                         class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -426,7 +592,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-primary mr-1" type="submit" name="submit5">Simpan</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
                                     id="send5">Close</button>
                             </div>
                         </form>
@@ -451,9 +617,6 @@
                                 <td>{{ $overtime->nama }}</td>
                                 <td>{{ Helper::rupiah($overtime->jumlah) }}</td>
                                 <td class="d-flex">
-                                    <button class="lembur btn btn-success btn-action btn-xs mr-1">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
                                     <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/lembur/$overtime->id/edit") }}"
                                         class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -516,7 +679,7 @@
 
                             <div class="modal-footer">
                                 <button class="btn btn-primary mr-1" type="submit" name="submit6">Simpan</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
                                     id="send6">Close</button>
                             </div>
                         </form>
@@ -541,9 +704,6 @@
                                 <td>{{ $infaq->nama }}</td>
                                 <td>{{ Helper::rupiah($infaq->jumlah) }}</td>
                                 <td class="d-flex">
-                                    <button class="infaq btn btn-success btn-action btn-xs mr-1">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
                                     <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/infaq/$infaq->id/edit") }}"
                                         class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -607,7 +767,7 @@
                             <div class="modal-footer">
                                 <button class="btn btn-primary mr-1" type="submit" name="submit7">Simpan</button>
 
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                <button type="button" class="close-btn btn btn-danger" data-dismiss="modal"
                                     id="send7">Close</button>
                             </div>
                         </form>
@@ -632,9 +792,6 @@
                                 <td>{{ $installment->nama }}</td>
                                 <td>{{ Helper::rupiah($installment->jumlah) }}</td>
                                 <td class="d-flex">
-                                    <button class="cicilan btn btn-success btn-action btn-xs mr-1">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
                                     <a href="{{ url()->to("gaji-pegawai/tunjangan/tetap/$allowance->nip/cicilan/$installment->id/edit") }}"
                                         class="btn btn-primary btn-xs btn-action mr-1" id="edit" title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -684,6 +841,8 @@
             $('#keahlian-form').hide();
             $('#kepala-keluarga-form').hide();
             $('#masa-kerja-form').hide();
+            $('#operasional-form').hide();
+            $('#lain-lain-form').hide();
             $('#reward-form').hide();
             $('#lembur-form').hide();
             $('#infaq-form').hide();
@@ -693,10 +852,16 @@
                 $('.close').click(function() {
                     $('#keahlian-form').hide('fade');
                 });
+                $('.close-btn').click(function() {
+                    $('#keahlian-form').hide('fade');
+                });
             });
             $('.kepala-keluarga').click(function() {
                 $('#kepala-keluarga-form').show('fade');
                 $('.close').click(function() {
+                    $('#kepala-keluarga-form').hide('fade');
+                });
+                $('.close-btn').click(function() {
                     $('#kepala-keluarga-form').hide('fade');
                 });
             });
@@ -705,16 +870,43 @@
                 $('.close').click(function() {
                     $('#masa-kerja-form').hide('fade');
                 });
+                $('.close-btn').click(function() {
+                    $('#masa-kerja-form').hide('fade');
+                });
+            });
+            $('.operasional').click(function() {
+                $('#operasional-form').show('fade');
+                $('.close').click(function() {
+                    $('#operasional-form').hide('fade');
+                });
+                $('.close-btn').click(function() {
+                    $('#operasional-form').hide('fade');
+                });
+            });
+            $('.lain-lain').click(function() {
+                $('#lain-lain-form').show('fade');
+                $('.close').click(function() {
+                    $('#lain-lain-form').hide('fade');
+                });
+                $('.close-btn').click(function() {
+                    $('#lain-lain-form').hide('fade');
+                });
             });
             $('.reward').click(function() {
                 $('#reward-form').show('fade');
                 $('.close').click(function() {
                     $('#reward-form').hide('fade');
                 });
+                $('.close-btn').click(function() {
+                    $('#reward-form').hide('fade');
+                });
             });
             $('.lembur').click(function() {
                 $('#lembur-form').show('fade');
                 $('.close').click(function() {
+                    $('#lembur-form').hide('fade');
+                });
+                $('.close-btn').click(function() {
                     $('#lembur-form').hide('fade');
                 });
             });

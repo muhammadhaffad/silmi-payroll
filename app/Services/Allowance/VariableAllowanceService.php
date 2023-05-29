@@ -4,14 +4,17 @@ namespace App\Services\Allowance;
 use App\Models\AttendanceLog;
 use App\Models\Employee;
 use App\Models\VariableAllowance;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class VariableAllowanceService
 {
     public function getAllEmployeeAllowances()
     {
+        $startDate = Carbon::now()->subMonth()->format('Y-m-29');
+        $endDate = Carbon::now()->format('Y-m-28');
         $allowances = Employee::with('variableAllowance')->withSum(
-            ['attendanceLogs' => function ($query) {return $query->where('tanggal_expired', '>=', date('Y-m-d'));}], 
+            ['attendanceLogs' => function ($query) use($startDate, $endDate) {return $query->where('tanggal_expired', '>=', date('Y-m-d'));}], 
             'total_jam'
         )->get();
         return [
@@ -101,6 +104,8 @@ class VariableAllowanceService
     }
     public function showWorkPresence($nip)
     {
+        $startDate = Carbon::now()->subMonth()->format('Y-m-29');
+        $endDate = Carbon::now()->format('Y-m-28');
         $logs = AttendanceLog::where('employee_nip', $nip)->where('tanggal_expired', '>=', date('Y-m-d'))->get();
         return [
             'code' => 200,
@@ -110,6 +115,8 @@ class VariableAllowanceService
     }
     public function printPresence($nip)
     {
+        $startDate = Carbon::now()->subMonth()->format('Y-m-29');
+        $endDate = Carbon::now()->format('Y-m-28');
         $logs = AttendanceLog::where('employee_nip', $nip)->where('tanggal_expired', '>=', date('Y-m-d'))->get(['tanggal', 'total_jam']);
         $employee = Employee::where('nip', $nip)->first()->load('variableAllowance');
         return [

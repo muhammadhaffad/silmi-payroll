@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,21 +11,36 @@ class Employee extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected static function booted()
+    {
+        static::addGlobalScope('activeEmployee', function (Builder $builder) {
+            $builder->where('status', true);
+        });
+    }
+
     protected $fillable = [
         'nip',
         'nama',
         'jenis_kelamin',
         'tanggal_lahir',
-        'devisi',
+        'devision_id',
         'jabatan',
         'tanggal_masuk',
         'alamat',
         'is_khusus',
         'status'
     ];
+    public function debts()
+    {
+        return $this->hasMany(Debt::class, 'employee_nip', 'nip');
+    }
     public function attendanceLogs()
     {
         return $this->hasMany(AttendanceLog::class, 'employee_nip', 'nip');
+    }
+    public function fixedAllowance()
+    {
+        return $this->hasOne(FixedAllowance::class, 'employee_nip', 'nip');
     }
     public function variableAllowance()
     {
@@ -41,6 +57,14 @@ class Employee extends Model
     public function seniorityAllowances()
     {
         return $this->hasMany(SeniorityAllowance::class, 'employee_nip', 'nip');
+    }
+    public function etcAllowances()
+    {
+        return $this->hasMany(EtcAllowance::class, 'employee_nip', 'nip');
+    }
+    public function operationalAllowances()
+    {
+        return $this->hasMany(OperationalAllowance::class, 'employee_nip', 'nip');
     }
     public function rewards()
     {

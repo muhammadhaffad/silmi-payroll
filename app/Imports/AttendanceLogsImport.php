@@ -6,15 +6,15 @@ use App\Models\AttendanceLog;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class AttendanceLogsImport implements ToModel, WithHeadingRow
+class AttendanceLogsImport implements ToModel, WithHeadingRow, WithStartRow
 {
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+    public function startRow(): int
+    {
+        return 3;
+    }
     public function model(array $row)
     {
         $scan1 = \Carbon\Carbon::parse($row['scan_1']);
@@ -36,6 +36,8 @@ class AttendanceLogsImport implements ToModel, WithHeadingRow
             $in = strtotime($row['scan_3']);
             $out = strtotime($row['scan_4']);
             $workHours = $out - $in;
+        } else {
+            $workHours = 0;
         }
         return new AttendanceLog([
             'employee_nip' => $row['nip'],
@@ -47,7 +49,7 @@ class AttendanceLogsImport implements ToModel, WithHeadingRow
             'scan_4' => $row['scan_4'] ? $scan4->format('H:i:s') : null,
             'jam' => (int) \Carbon\Carbon::parse($workHours)->format('H'),
             'menit' => (int) \Carbon\Carbon::parse($workHours)->format('i'),
-            'total_jam' => $workHours / 3600,
+            'total_jam' => (\Carbon\Carbon::createFromFormat("d/m/Y", $row['tanggal'])->format('l') == 'Sunday') ? ($workHours / 3600) * 2 : $workHours / 3600,
         ]);
     }
     public function headingRow() : int

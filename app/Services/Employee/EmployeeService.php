@@ -2,6 +2,7 @@
 namespace App\Services\Employee;
 
 use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeService
@@ -11,7 +12,7 @@ class EmployeeService
         return [
             'code' => 200,
             'message' => 'Data berhasil didapatkan',
-            'data' => Employee::all()
+            'data' => Employee::withoutGlobalScope('activeEmployee')->get()->all()
         ];
     }
     public function getEmployee($nip)
@@ -19,7 +20,16 @@ class EmployeeService
         return [
             'code' => 200,
             'message'=> 'Data berhasil didapatkan',
-            'data' => Employee::where('nip', $nip)->first()
+            'data' => Employee::withoutGlobalScope('activeEmployee')->where('nip', $nip)->first()
+        ];
+    }
+    public function countGenderEmployee()
+    {
+        $gender = Employee::select('jenis_kelamin', DB::raw('COUNT(*) AS jumlah'))->groupBy('jenis_kelamin')->get();
+        return [
+            'code' => 200,
+            'message' => 'Sukses mendapatkan data',
+            'data' => $gender
         ];
     }
     public function addEmployee($attr)
@@ -29,7 +39,7 @@ class EmployeeService
             'nama' => 'required',
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required|date',
-            'devisi' => 'required',
+            'devision_id' => 'required',
             'jabatan' => 'required',
             'tanggal_masuk' => 'required|date',
             'alamat' => 'required',
@@ -46,7 +56,7 @@ class EmployeeService
             'nama' => $attr['nama'],
             'jenis_kelamin' => $attr['jenis_kelamin'],
             'tanggal_lahir' => $attr['tanggal_lahir'],
-            'devisi' => $attr['devisi'],
+            'devision_id' => $attr['devision_id'],
             'jabatan' => $attr['jabatan'],
             'tanggal_masuk' => $attr['tanggal_masuk'],
             'alamat' => $attr['alamat'],
@@ -78,12 +88,12 @@ class EmployeeService
                 'errors' => $validator->errors()
             ];
         }
-        $employee = Employee::where('nip', $nip)->first();
+        $employee = Employee::withoutGlobalScope('activeEmployee')->where('nip', $nip)->first();
         $employee->nip = $attr['nip'];
         $employee->nama = $attr['nama'];
         $employee->jenis_kelamin = $attr['jenis_kelamin'];
         $employee->tanggal_lahir = $attr['tanggal_lahir'];
-        $employee->devisi = $attr['devisi'];
+        $employee->devision_id = $attr['devision_id'];
         $employee->jabatan = $attr['jabatan'];
         $employee->tanggal_masuk = $attr['tanggal_masuk'];
         $employee->alamat = $attr['alamat'];
@@ -121,7 +131,7 @@ class EmployeeService
     }
     public function toggleStatus($nip)
     {
-        $employee = Employee::where('nip', $nip)->first();
+        $employee = Employee::withoutGlobalScope('activeEmployee')->where('nip', $nip)->first();
         if ($employee->status) {
             $employee->status = false;
         } else {

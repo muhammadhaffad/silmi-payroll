@@ -2,10 +2,12 @@
 namespace App\Services\Allowance;
 
 use App\Models\Employee;
+use App\Models\EtcAllowance;
 use App\Models\ExpertiseAllowance;
 use App\Models\HouseholdAllowance;
 use App\Models\Infaq;
 use App\Models\Installment;
+use App\Models\OperationalAllowance;
 use App\Models\Overtime;
 use App\Models\Reward;
 use App\Models\SeniorityAllowance;
@@ -18,6 +20,8 @@ class FixedAllowanceService
         $allowances = Employee::withSum('expertiseAllowances', 'jumlah')
             ->withSum('householdAllowances', 'jumlah')
             ->withSum('seniorityAllowances', 'jumlah')
+            ->withSum('operationalAllowances', 'jumlah')
+            ->withSum('etcAllowances', 'jumlah')
             ->withSum('rewards', 'jumlah')
             ->withSum('overtimes', 'jumlah')
             ->withSum('infaqs', 'jumlah')
@@ -120,6 +124,38 @@ class FixedAllowanceService
                 'code' => 204,
                 'message' => 'Tunjangan berhasil ditambah'
             ];
+        } else if ($attr['tunjangan'] === 'operasional') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Operasional',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
+            OperationalAllowance::insert($attrMany);
+            return [
+                'code' => 204,
+                'message' => 'Tunjangan berhasil ditambah'
+            ];
+        } else if ($attr['tunjangan'] === 'lain-lain') {
+            $attrMany = [];
+            foreach ($attr['jumlah'] as $jumlah) {
+                $attrMany[] = [
+                    'employee_nip' => $attr['nip'],
+                    'nama' => 'Lain-lain',
+                    'jumlah' => $jumlah,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+            }
+            EtcAllowance::insert($attrMany);
+            return [
+                'code' => 204,
+                'message' => 'Tunjangan berhasil ditambah'
+            ];
         } else if ($attr['tunjangan'] === 'reward') {
             $attrMany = [];
             foreach ($attr['jumlah'] as $jumlah) {
@@ -197,6 +233,8 @@ class FixedAllowanceService
             'expertiseAllowances', 
             'householdAllowances', 
             'seniorityAllowances', 
+            'operationalAllowances', 
+            'etcAllowances', 
             'rewards',
             'overtimes',
             'infaqs',
@@ -205,6 +243,8 @@ class FixedAllowanceService
         ->loadSum('expertiseAllowances', 'jumlah')
         ->loadSum('householdAllowances', 'jumlah')
         ->loadSum('seniorityAllowances', 'jumlah')
+        ->loadSum('operationalAllowances', 'jumlah')
+        ->loadSum('etcAllowances', 'jumlah')
         ->loadSum('rewards', 'jumlah')
         ->loadSum('overtimes', 'jumlah')
         ->loadSum('infaqs', 'jumlah')
@@ -234,6 +274,18 @@ class FixedAllowanceService
                 'code' => 200,
                 'message' => 'Data berhasil didapatkan',
                 'data' => SeniorityAllowance::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'operasional')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => OperationalAllowance::where('employee_nip', $nip)->where('id', $id)->first()
+            ];
+        if ($tunjangan == 'lain-lain')
+            return [
+                'code' => 200,
+                'message' => 'Data berhasil didapatkan',
+                'data' => EtcAllowance::where('employee_nip', $nip)->where('id', $id)->first()
             ];
         if ($tunjangan == 'reward')
             return [
@@ -300,6 +352,26 @@ class FixedAllowanceService
         }
         if ($tunjangan == 'masa-kerja') {
             $allowance = SeniorityAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'operasional') {
+            $allowance = OperationalAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            $allowance->jumlah = $attr['jumlah'];
+            if ($allowance->save()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil diupdate'
+                ];
+            }
+        }
+        if ($tunjangan == 'lain-lain') {
+            $allowance = EtcAllowance::where('employee_nip', $nip)->where('id', $id)->first();
             $allowance->jumlah = $attr['jumlah'];
             if ($allowance->save()) {
                 return [
@@ -375,6 +447,24 @@ class FixedAllowanceService
         }
         if ($tunjangan == 'masa-kerja') {
             $allowance = SeniorityAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'operasional') {
+            $allowance = OperationalAllowance::where('employee_nip', $nip)->where('id', $id)->first();
+            if ($allowance->delete()) {
+                return [
+                    'code' => 204,
+                    'message' => 'Data berhasil dihapus'
+                ];
+            }
+        }
+        if ($tunjangan == 'lain-lain') {
+            $allowance = EtcAllowance::where('employee_nip', $nip)->where('id', $id)->first();
             if ($allowance->delete()) {
                 return [
                     'code' => 204,

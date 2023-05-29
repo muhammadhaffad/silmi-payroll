@@ -15,7 +15,7 @@
                     title="CETAK"><i class="fas fa-print"></i>
                     <span> &nbsp; CETAK </span>
                 </a>
-                <a href="index.php" class="btn btn-outline-primary btn-action btn-xs mr-1" title="kembali"><span>Kembali</span></a>
+                <a href="{{ url()->to('gaji-pegawai/tunjangan/tidak-tetap') }}" class="btn btn-outline-primary btn-action btn-xs mr-1" title="kembali"><span>Kembali</span></a>
             </div>
         </div>
         <div class="card-body">

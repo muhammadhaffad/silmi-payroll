@@ -11,7 +11,7 @@
                         <div class="card-header d-flex justify-content-between">
                             <h4>Update Data</h4>
                             <div class="card-header-action text-right">
-                                <a href="index.php" class="btn btn-primary btn-action btn-xs mr-1"
+                                <a href="{{ url()->to('gaji-pegawai/data-master/direksi') }}" class="btn btn-primary btn-action btn-xs mr-1"
                                     title="kembali"><span>Kembali</span></a>
                             </div>
                         </div>

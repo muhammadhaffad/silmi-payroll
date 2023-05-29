@@ -31,6 +31,8 @@
                             <th>Tunjangan Keahlian</th>
                             <th>Tunjangan Keapala Keluarga</th>
                             <th>Tunjangan Masa Kerja</th>
+                            <th>Tunjangan Operasional</th>
+                            <th>Tunjangan Lain-lain</th>
                             <th>Reward</th>
                             <th>Lembur</th>
                             <th>Infaq</th>
@@ -57,6 +59,8 @@
                                 <td>{{ Helper::rupiah($allowance->expertise_allowances_sum_jumlah) }}</td>
                                 <td>{{ Helper::rupiah($allowance->household_allowances_sum_jumlah) }}</td>
                                 <td>{{ Helper::rupiah($allowance->seniority_allowances_sum_jumlah) }}</td>
+                                <td>{{ Helper::rupiah($allowance->operational_allowances_sum_jumlah) }}</td>
+                                <td>{{ Helper::rupiah($allowance->etc_allowances_sum_jumlah) }}</td>
                                 <td>{{ Helper::rupiah($allowance->rewards_sum_jumlah) }}</td>
                                 <td>{{ Helper::rupiah($allowance->overtimes_sum_jumlah) }}</td>
                                 <td>{{ Helper::rupiah($allowance->infaqs_sum_jumlah) }}</td>
@@ -66,6 +70,8 @@
                                         $total = $allowance->household_allowances_sum_jumlah + 
                                             $allowance->expertise_allowances_sum_jumlah + 
                                             $allowance->seniority_allowances_sum_jumlah + 
+                                            $allowance->operational_allowances_sum_jumlah + 
+                                            $allowance->etc_allowances_sum_jumlah + 
                                             $allowance->rewards_sum_jumlah + 
                                             $allowance->overtimes_sum_jumlah - 
                                             $allowance->infaqs_sum_jumlah -
@@ -111,6 +117,8 @@
                                             <option value="keahlian">Tunjangan Keahlian</option>
                                             <option value="kepala-keluarga">Tunjangan Kepala Keluarga</option>
                                             <option value="masa-kerja">Tunjangan Masa Kerja</option>
+                                            <option value="operasional">Tunjangan Operasional</option>
+                                            <option value="lain-lain">Tunjangan Lain-lain</option>
                                             <option value="reward">Reward</option>
                                             <option value="lembur">Lembur</option>
                                             <option value="infaq">Infaq</option>
@@ -147,6 +155,18 @@
                                     </div>
                                     <div class="tunjangan form-group" id="masa-kerja">
                                         <div class="section-title mt-0">Jumlah Tunjangan Masa Kerja</div>
+                                        <div class="input-group mb-2">
+                                            <input type="number" class="form-control" name="jumlah[]" required>
+                                        </div>
+                                    </div>
+                                    <div class="tunjangan form-group" id="operasional">
+                                        <div class="section-title mt-0">Jumlah Tunjangan Operasional</div>
+                                        <div class="input-group mb-2">
+                                            <input type="number" class="form-control" name="jumlah[]" required>
+                                        </div>
+                                    </div>
+                                    <div class="tunjangan form-group" id="lain-lain">
+                                        <div class="section-title mt-0">Jumlah Tunjangan Lain-lain</div>
                                         <div class="input-group mb-2">
                                             <input type="number" class="form-control" name="jumlah[]" required>
                                         </div>

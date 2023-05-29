@@ -204,15 +204,15 @@
                                     </div>
                                     <div class="widget-body mt-3">
                                         <div class="form-group">
+                                            @php
+                                                $devisions = App\Models\Devision::all();
+                                            @endphp
                                             <div class="section-title mt-0">Pilih Devisi</div>
-                                            <select class="custom-select" name="devisi">
+                                            <select class="custom-select" name="devision_id">
                                                 <option disabled selected>Pilih Devisi</option>
-                                                <option value="SALES">SALES</option>
-                                                <option value="MANAJEMEN">MANAJEMEN</option>
-                                                <option value="RND">RND</option>
-                                                <option value="PRODUKSI">PRODUKSI</option>
-                                                <option value="MARKOM">MARKOM</option>
-                                                <option value="TOKO">TOKO</option>
+                                                @foreach ($devisions as $devision)
+                                                <option value="{{$devision->id}}">{{$devision->nama}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>

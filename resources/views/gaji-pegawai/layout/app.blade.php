@@ -76,8 +76,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/lembur-sales*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-sales') }}">Lembur (SALES)
-                        </a>
+                        {{-- <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/lembur-sales*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-sales') }}">Lembur (SALES)
+                        </a> --}}
                         <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/lembur-reward-cicilan*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/lembur-reward-cicilan') }}">Lembur Reward Cicilan
                         </a>
                         <a class="collapse-item {{ (request()->is('gaji-pegawai/tunjangan/tetap*')) ? 'active' : '' }}" href="{{ url()->to('/gaji-pegawai/tunjangan/tetap') }}">Tunjangan Tetap

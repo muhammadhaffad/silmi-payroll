@@ -12,7 +12,7 @@
                         <div class="card-header d-flex justify-content-between">
                             <h4>Update Data Karyawan</h4>
                             <div class="card-header-action text-right">
-                                <a class="btn btn-primary btn-action btn-xs mr-1" title="kembali"><span>Kembali</span></a>
+                                <a href="{{ url()->to('gaji-pegawai/data-master/karyawan') }}" class="btn btn-primary btn-action btn-xs mr-1" title="kembali"><span>Kembali</span></a>
                             </div>
                         </div>
                         <div class="container">

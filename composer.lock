@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e12cd1775c8742ce6b38b007dea76298",
+    "content-hash": "08c42ab340b53e590a36cd6eb91683fc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6524,6 +6524,59 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.6"
             },
             "time": "2023-01-03T09:29:04+00:00"
+        },
+        {
+            "name": "transloadit/php-sdk",
+            "version": "3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/transloadit/php-sdk.git",
+                "reference": "3794aeb40e94aa5228cde40cf0c03c7d49e86872"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/transloadit/php-sdk/zipball/3794aeb40e94aa5228cde40cf0c03c7d49e86872",
+                "reference": "3794aeb40e94aa5228cde40cf0c03c7d49e86872",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "satooshi/php-coveralls": "0.7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "transloadit": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Transloadit SDK",
+            "homepage": "https://github.com/transloadit/php-sdk",
+            "keywords": [
+                "Thumbnails",
+                "audio",
+                "document",
+                "encoding",
+                "file",
+                "image",
+                "processing",
+                "resizing",
+                "transloadit",
+                "uploading",
+                "video",
+                "waveform"
+            ],
+            "support": {
+                "issues": "https://github.com/transloadit/php-sdk/issues",
+                "source": "https://github.com/transloadit/php-sdk/tree/3.0.4"
+            },
+            "time": "2020-04-08T18:54:18+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

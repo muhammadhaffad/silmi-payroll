@@ -66,6 +66,6 @@ class VariableAllowanceController extends Controller
     public function downloadLog($nip)
     {
         $result = $this->variableAllowanceService->printPresence($nip);
-        return Excel::download(new AttendanceLogExport($result), 'log.pdf', MaatwebsiteExcel::MPDF);
+        return Excel::download(new AttendanceLogExport($result), sprintf('log_%s_%s.pdf', $result['employee']->nama, date('Y-m')), MaatwebsiteExcel::MPDF);
     }
 }
