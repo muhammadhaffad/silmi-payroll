@@ -46,6 +46,7 @@
                     </thead>
                     <tbody> 
                         @forelse ($salaries as $salary)
+                            @if ($salary->devisi !== 'DIREKSI')
                             <tr>
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$salary->nama}}</td>
@@ -91,7 +92,8 @@
                                         </button>
                                     </form>
                                 </td>
-                            </tr>
+                            </tr>  
+                            @endif
                         @empty
                             <tr>
                                 <td colspan="8" align="center">Data Kosong, Silahkan buat laporan bulan ini</td>

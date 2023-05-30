@@ -69,9 +69,8 @@
                                                     <td>
                                                         @php
                                                             $total = 0;
-                                                            $directors = App\Models\Director::all();
-                                                            foreach ($directors as $director) {
-                                                                $total += $director->gaji + $director->gaji_tambahan;
+                                                            foreach ($directorSalaries as $director) {
+                                                                $total += $director->total;
                                                             }
                                                             $allTotal += $total;
                                                         @endphp

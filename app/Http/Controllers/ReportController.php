@@ -19,10 +19,12 @@ class ReportController extends Controller
     }
     public function index()
     {
-        $result = $this->reportService->getAllDevisionSalaries();
-        // return response()->json($result);
+        $devisons = $this->reportService->getAllDevisionSalaries();
+        $directors = $this->reportService->getDirectorSalaries();
+        // return response()->json($devisons);
         return view('gaji-pegawai.laporan.index', [
-            'salaries' => $result['data']
+            'directorSalaries' => $directors['data'],
+            'salaries' => $devisons['data']
         ]);
     }
     public function printFullReport(Request $request)
