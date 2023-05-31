@@ -110,5 +110,38 @@ Route::prefix('/gaji-pegawai')->group(function () {
     Route::post('laporan/print-full', [ReportController::class, 'printFullReport']);
     Route::get('laporan/make-report', [ReportController::class, 'makeReport']);
 });
+Route::prefix('/gaji-penjahit')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('gaji-penjahit.dashboard.index');
+    });
+    Route::prefix('/data-master')->group(function () {
+        Route::get('jahit', function () {
+            return view('gaji-penjahit.jahit.index');
+        });
+        Route::get('kebutuhan-jahit', function () {
+            return view('gaji-penjahit.kebutuhan-jahit.index');
+        });
+        Route::get('karyawan', function () {
+            return view('gaji-penjahit.karyawan.index');
+        });
+    });
+    Route::prefix('/pengaturan')->group(function () {
+        Route::get('/kompensasi-kasus', function () {
+            return 'kompensasi kasus';
+        });
+        Route::get('/kompensasi-total-jahit', function () {
+            return 'kompensasi total jahit';
+        });
+    });
+    Route::get('/entri-data-gaji', function () {
+        return 'Entri data gaji';
+    });
+    Route::get('/gaji', function () {
+        return 'Gaji';
+    }); 
+    Route::get('/laporan', function () {
+        return 'Laporan';
+    }); 
+});
 Route::get('test-export', [TestExcelController::class, 'export']);
 Route::get('migrate', [MigrateDatabase::class, 'migrate']);
