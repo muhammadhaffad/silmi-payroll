@@ -127,7 +127,7 @@ Route::prefix('/gaji-penjahit')->group(function () {
     });
     Route::prefix('/pengaturan')->group(function () {
         Route::get('/kompensasi-kasus', function () {
-            return 'kompensasi kasus';
+            return view('gaji-penjahit.kompensasi-kasus.index');
         });
         Route::get('/kompensasi-total-jahit', function () {
             return 'kompensasi total jahit';
