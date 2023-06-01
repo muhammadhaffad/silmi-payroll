@@ -1,4 +1,4 @@
-@extends('gaji-penjahit.layout.app', ['title' => 'Data Jahit'])
+@extends('gaji-penjahit.layout.app', ['title' => 'Kompensasi Kasus'])
 @section('content')
     <h3>Kompensasi Kasus</h3>
     <div class="card">

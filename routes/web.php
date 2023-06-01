@@ -130,17 +130,23 @@ Route::prefix('/gaji-penjahit')->group(function () {
             return view('gaji-penjahit.kompensasi-kasus.index');
         });
         Route::get('/kompensasi-total-jahit', function () {
-            return 'kompensasi total jahit';
+            return view('gaji-penjahit.kompensasi-total-jahit.index');
+        });
+        Route::get('/kompensasi-total-jahit/{id}/edit', function ($id) {
+            return view('gaji-penjahit.kompensasi-total-jahit.edit');
         });
     });
     Route::get('/entri-data-gaji', function () {
-        return 'Entri data gaji';
+        return view('gaji-penjahit.entri-data-gaji.index');
+    });
+    Route::get('/entri-data-gaji/{id}/entri', function ($id) {
+        return view('gaji-penjahit.entri-data-gaji.create');
     });
     Route::get('/gaji', function () {
-        return 'Gaji';
+        return view('gaji-penjahit.gaji.index');
     }); 
     Route::get('/laporan', function () {
-        return 'Laporan';
+        return view('gaji-penjahit.laporan.index');
     }); 
 });
 Route::get('test-export', [TestExcelController::class, 'export']);
