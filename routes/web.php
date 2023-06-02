@@ -146,6 +146,12 @@ Route::prefix('/gaji-penjahit')->group(function () {
     Route::get('/entri-data-gaji/{id}/entri', function ($id) {
         return view('gaji-penjahit.entri-data-gaji.create');
     });
+    Route::post('/entri-data-gaji/{id}/entri/tambah-jahit', [EntrySalaryController::class, 'addSewingTask'])->name('entri-data-gaji.tambah-jahit');
+    Route::post('/entri-data-gaji/{id}/entri/cacat-jahit', [EntrySalaryController::class, 'addSewingDefect'])->name('entri-data-gaji.cacat-jahit');
+    Route::post('/entri-data-gaji/{id}/entri/tambah-kebutuhan-jahit', [EntrySalaryController::class, 'addSewingNeed'])->name('entri-data-gaji.tambah-kebutuhan-jahit');
+    Route::post('/entri-data-gaji/{id}/entri/simpan-bubut', [EntrySalaryController::class, 'saveTrimming'])->name('entri-data-gaji.simpan-bubut');
+    Route::post('/entri-data-gaji/{id}/entri/simpan-cicilan', [EntrySalaryController::class, 'saveInstallment'])->name('entri-data-gaji.simpan-cicilan');
+    Route::post('/entri-data-gaji/{id}/entri/simpan-infaq', [EntrySalaryController::class, 'saveInfaq'])->name('entri-data-gaji.simpan-infaq');
     Route::get('/gaji', function () {
         return view('gaji-penjahit.gaji.index');
     }); 

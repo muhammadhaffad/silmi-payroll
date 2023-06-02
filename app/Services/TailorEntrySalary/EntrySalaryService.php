@@ -27,7 +27,7 @@ class EntrySalaryService
         return [
             'code' => 200,
             'message' => 'Sukses mendapatkan data',
-            'data' => Employee::find($id)->load(['sewingTasks', 'sewingCompensation', 'sewingDefect', 'sewingNeeds', 'trimming', 'installment', 'infaq'])
+            'data' => Employee::find($id)->loadSum('sewingTasks', 'total')->loadSum('sewingNeeds', 'total')->load(['sewingTasks', 'sewingCompensation', 'sewingDefect', 'sewingNeeds', 'trimming', 'installment', 'infaq'])
         ];
     }
     public function addSewingTask($id, $attr)
@@ -56,7 +56,7 @@ class EntrySalaryService
             'qty' => $attr['qty']
         ]);
         return [
-            'code' => 200,
+            'code' => 201,
             'message' => 'Tugas jahit berhasil ditambahkan',
             'data' => $sewingTask
         ];
@@ -131,8 +131,8 @@ class EntrySalaryService
             'qty' => $attr['qty']
         ]);
         return [
-            'code' => 200,
-            'message' => 'Tugas jahit berhasil ditambahkan',
+            'code' => 201,
+            'message' => 'Kebutuhan jahit berhasil ditambahkan',
             'data' => $sewingNeed
         ];
     }
