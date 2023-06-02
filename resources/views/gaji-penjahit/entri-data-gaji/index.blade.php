@@ -27,21 +27,22 @@
                     </thead>
 
                     <tbody>
+                        @forelse ($employees as $employee)
                         <tr>
-                            <td>1</td>
+                            <td>{{$loop->iteration}}</td>
                             <td>
-                                AZIZAH
+                                {{$employee->nama}}
                             </td>
-                            <td>{{Helper::rupiah(2000000)}}</td>
-                            <td>10%</td>
-                            <td>{{Helper::rupiah(200000)}}</td>
-                            <td>{{Helper::rupiah(100000)}}</td>
-                            <td>1%</td>
-                            <td>5%</td>
-                            <td>{{Helper::rupiah(100000)}}</td>
-                            <td>{{Helper::rupiah(10000)}}</td>
-                            <td>{{Helper::rupiah(10000)}}</td>
-                            <td>{{Helper::rupiah(10000)}}</td>
+                            <td>{{Helper::rupiah($employee->sewing_tasks_sum_total)}}</td>
+                            <td>{{$employee->sewingCompensation->kompensasi_persen ?? 0}}%</td>
+                            <td>{{Helper::rupiah(($employee->sewingCompensation->kompensasi_persen ?? 0)*$employee->sewing_tasks_sum_total/100)}}</td>
+                            <td>{{Helper::rupiah($employee->sewing_needs_sum_total)}}</td>
+                            <td>{{$employee->sewingDefect->cacat_persen ?? 0}}%</td>
+                            <td>{{$employee->sewingDefect->kompensasi_persen ?? 0}}%</td>
+                            <td>{{Helper::rupiah(($employee->sewingDefect->kompensasi_persen ?? 0)*$employee->sewing_tasks_sum_total/100)}}</td>
+                            <td>{{Helper::rupiah($employee->installment->jumlah)}}</td>
+                            <td>{{Helper::rupiah($employee->infaq->jumlah)}}</td>
+                            <td>{{Helper::rupiah($employee->trimming->jumlah)}}</td>
                             <td>{{Helper::rupiah(2200000)}}</td>
                             <td class="d-flex">
                                 <button class="btn btn-primary btn-xs btn-action mr-1" title="Entri/Edit" data-toggle="modal" data-target="#editDataJahit-1">
@@ -81,6 +82,9 @@
                                 </div>
                             </td>
                         </tr>
+                        @empty
+                            
+                        @endforelse
                     </tbody>
                 </table>
             </div>

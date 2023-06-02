@@ -9,6 +9,10 @@ use App\Http\Controllers\MigrateDatabase;
 use App\Http\Controllers\OvertimeRewardInstallmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\Tailor\EmployeeController as TailorEmployeeController;
+use App\Http\Controllers\Tailor\EntrySalaryController;
+use App\Http\Controllers\Tailor\SewingController;
+use App\Http\Controllers\Tailor\SewingSupplyController;
 use App\Http\Controllers\TestExcelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VariableAllowanceController;
@@ -115,15 +119,17 @@ Route::prefix('/gaji-penjahit')->group(function () {
         return view('gaji-penjahit.dashboard.index');
     });
     Route::prefix('/data-master')->group(function () {
-        Route::get('jahit', function () {
-            return view('gaji-penjahit.jahit.index');
-        });
-        Route::get('kebutuhan-jahit', function () {
-            return view('gaji-penjahit.kebutuhan-jahit.index');
-        });
-        Route::get('karyawan', function () {
-            return view('gaji-penjahit.karyawan.index');
-        });
+        Route::get('jahit', [SewingController::class, 'index'])->name('data-master.jahit');
+        Route::post('jahit/{id}/delete', [SewingController::class, 'delete'])->name('data-master.jahit.delete');
+        Route::put('jahit/{id}/update', [SewingController::class, 'update'])->name('data-master.jahit.update');
+        Route::post('jahit/create', [SewingController::class, 'create'])->name('data-master.jahit.create');
+        Route::get('kebutuhan-jahit', [SewingSupplyController::class, 'index'])->name('data-master.kebutuhan-jahit');
+        Route::post('kebutuhan-jahit/{id}/delete', [SewingSupplyController::class, 'delete'])->name('data-master.kebutuhan-jahit.delete');
+        Route::post('kebutuhan-jahit/create', [SewingSupplyController::class, 'create'])->name('data-master.kebutuhan-jahit.create');
+        Route::put('kebutuhan-jahit/{id}/update', [SewingSupplyController::class, 'update'])->name('data-master.kebutuhan-jahit.update');
+        Route::get('karyawan', [TailorEmployeeController::class, 'index'])->name('data-master.karyawan');
+        Route::put('karyawan/{id}/update', [TailorEmployeeController::class, 'update'])->name('data-master.karyawan.update');
+        Route::post('karyawan/create', [TailorEmployeeController::class, 'create'])->name('data-master.karyawan.create');
     });
     Route::prefix('/pengaturan')->group(function () {
         Route::get('/kompensasi-kasus', function () {
@@ -136,9 +142,7 @@ Route::prefix('/gaji-penjahit')->group(function () {
             return view('gaji-penjahit.kompensasi-total-jahit.edit');
         });
     });
-    Route::get('/entri-data-gaji', function () {
-        return view('gaji-penjahit.entri-data-gaji.index');
-    });
+    Route::get('/entri-data-gaji', [EntrySalaryController::class, 'index']);
     Route::get('/entri-data-gaji/{id}/entri', function ($id) {
         return view('gaji-penjahit.entri-data-gaji.create');
     });

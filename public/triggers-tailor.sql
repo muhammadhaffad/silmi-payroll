@@ -132,7 +132,7 @@ WHERE ((min_total_jahit <= total_jahit_var AND maks_total_jahit >= total_jahit_v
 	OR (min_total_jahit < total_jahit_var AND maks_total_jahit >= total_jahit_var AND inclusive_min = FALSE AND inclusive_maks = TRUE) 
 	OR (min_total_jahit <= total_jahit_var AND maks_total_jahit > total_jahit_var AND inclusive_min = TRUE AND inclusive_maks = FALSE) 
 	OR (min_total_jahit < total_jahit_var AND maks_total_jahit > total_jahit_var AND inclusive_min = FALSE AND inclusive_maks = FALSE))
-	AND deleted_at IS NULL LIMIT 1;
+	AND employee_id = NEW.employee_id AND deleted_at IS NULL LIMIT 1;
 	
 IF (SELECT COUNT(*) FROM sewing_compensation WHERE sewing_compensation.employee_id = NEW.employee_id AND deleted_at IS NULL > 0) THEN
 	UPDATE sewing_compensation 
@@ -163,7 +163,7 @@ WHERE ((min_total_jahit <= total_jahit_var AND maks_total_jahit >= total_jahit_v
 	OR (min_total_jahit < total_jahit_var AND maks_total_jahit >= total_jahit_var AND inclusive_min = FALSE AND inclusive_maks = TRUE) 
 	OR (min_total_jahit <= total_jahit_var AND maks_total_jahit > total_jahit_var AND inclusive_min = TRUE AND inclusive_maks = FALSE) 
 	OR (min_total_jahit < total_jahit_var AND maks_total_jahit > total_jahit_var AND inclusive_min = FALSE AND inclusive_maks = FALSE))
-	AND deleted_at IS NULL LIMIT 1;
+	AND employee_id = NEW.employee_id AND deleted_at IS NULL LIMIT 1;
 	
 IF (SELECT COUNT(*) FROM sewing_compensation WHERE sewing_compensation.employee_id = NEW.employee_id AND deleted_at IS NULL > 0) THEN
 	UPDATE sewing_compensation 
