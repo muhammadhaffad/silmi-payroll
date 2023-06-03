@@ -18,6 +18,11 @@ class EntrySalaryController extends Controller
         $result = $this->entrySalaryService->getAllEmployeeSalaries();
         return view('gaji-penjahit.entri-data-gaji.index', ['employees' => $result['data']]);
     }
+    public function show($id)
+    {
+        $result = $this->entrySalaryService->getSalaryEmployee($id);
+        return view('gaji-penjahit.entri-data-gaji.create', ['employee' => $result['data']]);
+    }
     public function addSewingTask($id, Request $request)
     {
         $result = $this->entrySalaryService->addSewingTask($id, $request->all());
@@ -28,6 +33,32 @@ class EntrySalaryController extends Controller
             return abort(404);
         }
         if ($result['code'] == 201) {
+            return redirect()->back()->with('success', $result['message']);
+        }
+    }
+    public function updateSewingTask($id, Request $request)
+    {
+        $result = $this->entrySalaryService->updateSewingTask($id, $request->all());
+        if ($result['code'] == 422) {
+            return redirect()->back()->with('errors', $result['message']);
+        }
+        if ($result['code'] == 404) {
+            return abort(404);
+        }
+        if ($result['code'] == 204) {
+            return redirect()->back()->with('success', $result['message']);
+        }
+    }
+    public function deleteSewingTask($id, Request $request)
+    {
+        $result = $this->entrySalaryService->removeSewingTask($id);
+        if ($result['code'] == 422) {
+            return redirect()->back()->with('errors', $result['message']);
+        }
+        if ($result['code'] == 404) {
+            return abort(404);
+        }
+        if ($result['code'] == 204) {
             return redirect()->back()->with('success', $result['message']);
         }
     }
@@ -54,6 +85,32 @@ class EntrySalaryController extends Controller
             return abort(404);
         }
         if ($result['code'] == 201) {
+            return redirect()->back()->with('success', $result['message']);
+        }
+    }
+    public function updateSewingNeed($id, Request $request)
+    {
+        $result = $this->entrySalaryService->updateSewingNeed($id, $request->all());
+        if ($result['code'] == 422) {
+            return redirect()->back()->with('errors', $result['message']);
+        }
+        if ($result['code'] == 404) {
+            return abort(404);
+        }
+        if ($result['code'] == 204) {
+            return redirect()->back()->with('success', $result['message']);
+        }
+    }
+    public function deleteSewingNeed($id, Request $request)
+    {
+        $result = $this->entrySalaryService->removeSewingNeed($id);
+        if ($result['code'] == 422) {
+            return redirect()->back()->with('errors', $result['message']);
+        }
+        if ($result['code'] == 404) {
+            return abort(404);
+        }
+        if ($result['code'] == 204) {
             return redirect()->back()->with('success', $result['message']);
         }
     }

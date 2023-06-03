@@ -28,6 +28,15 @@
 
                     <tbody>
                         @forelse ($employees as $employee)
+                        @php
+                            $finalSalary = $employee->sewing_tasks_sum_total 
+                                + (($employee->sewingCompensation->kompensasi_persen ?? 0)*$employee->sewing_tasks_sum_total/100)
+                                + (($employee->sewingDefect->kompensasi_persen ?? 0)*$employee->sewing_tasks_sum_total/100)
+                                + $employee->trimming->jumlah
+                                - $employee->sewing_needs_sum_total
+                                - $employee->installment->jumlah
+                                - $employee->infaq->jumlah;
+                        @endphp
                         <tr>
                             <td>{{$loop->iteration}}</td>
                             <td>
@@ -43,12 +52,12 @@
                             <td>{{Helper::rupiah($employee->installment->jumlah)}}</td>
                             <td>{{Helper::rupiah($employee->infaq->jumlah)}}</td>
                             <td>{{Helper::rupiah($employee->trimming->jumlah)}}</td>
-                            <td>{{Helper::rupiah(2200000)}}</td>
+                            <td>{{Helper::rupiah($finalSalary)}}</td>
                             <td class="d-flex">
-                                <button class="btn btn-primary btn-xs btn-action mr-1" title="Entri/Edit" data-toggle="modal" data-target="#editDataJahit-1">
+                                <a href="{{route('entri-data-gaji.show', ['id' => $employee->id])}}" class="btn btn-primary btn-xs btn-action mr-1" title="Entri/Edit">
                                     <i class="fas fa-edit">
                                     </i>
-                                </button>
+                                </a>
                                 <button class="btn btn-danger btn-xs delete-data mr-1" title="hapus">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>

@@ -2,43 +2,102 @@
 @section('content')
     <h3>Kompensasi Kasus</h3>
     <div class="card">
-        <div class="card-header d-flex">
-            <div class="form-group w-100 pr-2">
-                <label for="inputMin">Minimal %</label>
-                <input type="number" class="form-control" id="inputMin" placeholder="Masukan nilai minimal">
+        <form action="{{route('pengaturan.kompensasi-kasus.create')}}" method="post">
+            @csrf
+            <div class="card-header d-flex">
+                <div class="form-group w-100 pr-2">
+                    <label for="inputMin">Minimal %</label>
+                    <input name="min_cacat_persen" type="number" class="form-control" id="inputMin" placeholder="Masukan nilai minimal">
+                </div>
+                <div class="form-group mt-auto pr-2">
+                    {{-- <label for="inclusiveMin">Operator</label> --}}
+                    <select name="inclusive_min" id="inclusiveMin" class="form-control w-auto selectpicker">
+                        <option value="1">≤</option>
+                        <option value="0"><</option>
+                    </select>
+                </div>
+                <div class="form-group mt-auto pr-2">
+                    {{-- <label for="inclusiveMin">Operator</label> --}}
+                    <div class="p-2 text-nowrap">KASUS</div>
+                </div>
+                <div class="form-group mt-auto pr-2">
+                    {{-- <label for="inclusiveMin">Operator</label> --}}
+                    <select name="inclusive_maks" id="inclusiveMin" class="form-control w-auto selectpicker">
+                        <option value="1">≤</option>
+                        <option value="0"><</option>
+                    </select>
+                </div>
+                <div class="form-group w-100 pr-2">
+                    <label for="inputMax">Maksimal %</label>
+                    <input name="maks_cacat_persen" type="number" class="form-control" id="inputMax" placeholder="Masukan nilai maksimal">
+                </div>
+                <div class="form-group w-100 pr-2">
+                    <label for="inputKompensasi">Kompensasi %</label>
+                    <input name="kompensasi_persen" type="number" class="form-control" id="inputKompensasi" placeholder="Kompensasi">
+                </div>
+                <div class="form-group mt-auto">
+                    <button type="submit" class="btn btn-primary text-nowrap">+ Tambah</button>
+                </div>
             </div>
-            <div class="form-group mt-auto pr-2">
-                {{-- <label for="inclusiveMin">Operator</label> --}}
-                <select id="inclusiveMin" class="form-control w-auto selectpicker">
-                    <option>≤</option>
-                    <option><</option>
-                </select>
-            </div>
-            <div class="form-group mt-auto pr-2">
-                {{-- <label for="inclusiveMin">Operator</label> --}}
-                <div class="form-control text-nowrap">[INPUT]</div>
-            </div>
-            <div class="form-group mt-auto pr-2">
-                {{-- <label for="inclusiveMin">Operator</label> --}}
-                <select id="inclusiveMin" class="form-control w-auto selectpicker">
-                    <option>≤</option>
-                    <option><</option>
-                </select>
-            </div>
-            <div class="form-group w-100 pr-2">
-                <label for="inputMax">Maksimal %</label>
-                <input type="number" class="form-control" id="inputMax" placeholder="Masukan nilai maksimal">
-            </div>
-            <div class="form-group w-100 pr-2">
-                <label for="inputKompensasi">Kompensasi %</label>
-                <input type="number" class="form-control" id="inputKompensasi" placeholder="Kompensasi">
-            </div>
-            <div class="form-group mt-auto">
-                <button type="button" class="btn btn-primary text-nowrap">+ Tambah</button>
-            </div>
-        </div>
+        </form>
         <div class="card-body">
-            <div class="table-responsive">
+            @foreach ($defectRules as $rule)
+            <form id="update-rule-{{$rule->id}}" action="{{route('pengaturan.kompensasi-kasus.update', ['id'=>$rule->id])}}" method="post">
+                @csrf
+                @method('PUT')
+            </form>
+            <div class="d-flex">
+                <div class="form-group w-100 mr-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Rp</span>
+                        </div>
+                        <input form="update-rule-{{$rule->id}}" required name="min_cacat_persen" value="{{$rule->min_cacat_persen}}" type="number" min="0" class="form-control" placeholder="Masukan jumlah minimal">
+                    </div>
+                </div>
+                <div class="form-group pr-2"> 
+                    <select form="update-rule-{{$rule->id}}" required name="inclusive_min" id="inclusiveMin" class="form-control w-auto selectpicker">
+                        <option value="1" @selected($rule->inclusive_min == 1)>≤</option>
+                        <option value="0" @selected($rule->inclusive_min == 0)><</option>
+                    </select>
+                </div>
+                <div class="form-group pr-2">
+                    <div class="p-2 text-nowrap">JUMLAH</div>
+                </div>
+                <div class="form-group pr-2">
+                    <select form="update-rule-{{$rule->id}}" required name="inclusive_maks" class="form-control w-auto selectpicker">
+                        <option value="1" @selected($rule->inclusive_maks == 1)>≤</option>
+                        <option value="0" @selected($rule->inclusive_maks == 0)><</option>
+                    </select>
+                </div>
+                <div class="form-group w-100 mr-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Rp</span>
+                        </div>
+                        <input form="update-rule-{{$rule->id}}" required name="maks_cacat_persen" value="{{$rule->maks_cacat_persen}}" type="number" min="0" class="form-control" placeholder="Masukan jumlah maksimal">
+                    </div>
+                </div>
+                <span class="mr-2 pt-2">=</span>
+                <div class="form-group mr-2 w-100">
+                    <div class="input-group">
+                        <input form="update-rule-{{$rule->id}}" required name="kompensasi_persen" type="number" value="{{$rule->kompensasi_persen}}" min="0" class="form-control" placeholder="Masukan nilai kompensasi">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                          </div>
+                    </div>
+                </div>
+                <div class="form-group d-flex">
+                    <button form="update-rule-{{$rule->id}}" type="submit" class="ml-auto btn btn-success text-nowrap mr-2" data-toggle="modal"
+                        data-target="#edit-jahit-1">Update</button>
+                    <form action="{{route('pengaturan.kompensasi-kasus.remove', ['id'=>$rule->id])}}" method="post" onsubmit="return confirm('Apakah Anda ingin menghapus item ini?')">
+                        @csrf
+                        <button type="submit" class="ml-auto btn btn-danger text-nowrap">Hapus</button>
+                    </form>
+                </div>
+            </div>
+            @endforeach
+            {{-- <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -57,18 +116,15 @@
                                         <input type="number" class="form-control" id="inputMin" placeholder="Masukan nilai minimal">
                                     </div>
                                     <div class="form-group mb-0 mt-auto pr-2">
-                                        {{-- <label for="inclusiveMin">Operator</label> --}}
                                         <select id="inclusiveMin" class="form-control w-auto selectpicker">
                                             <option>≤</option>
                                             <option><</option>
                                         </select>
                                     </div>
                                     <div class="form-group mb-0 mt-auto pr-2">
-                                        {{-- <label for="inclusiveMin">Operator</label> --}}
                                         <div class="form-control text-nowrap">[INPUT]</div>
                                     </div>
                                     <div class="form-group mb-0 mt-auto pr-2">
-                                        {{-- <label for="inclusiveMin">Operator</label> --}}
                                         <select id="inclusiveMin" class="form-control w-auto selectpicker">
                                             <option>≤</option>
                                             <option><</option>
@@ -123,7 +179,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection

@@ -227,7 +227,7 @@ class EntrySalaryService
             ];
         }
         Trimming::updateOrCreate(['employee_id' => $id],[
-            'cacat_persen' => $attr['cacat_persen']
+            'jumlah' => $attr['jumlah']
         ]);
         return [
             'code' => 204,

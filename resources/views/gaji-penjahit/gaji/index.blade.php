@@ -10,7 +10,7 @@
                     <div class="form-group mr-2">
                         <label for="year">Tahun:</label>
                         <select class="form-control" name="year" id="year">
-                          @for ($year = 2010; $year <= (int) date('Y'); $year++)
+                          @for ($year = 2023; $year <= (int) date('Y'); $year++)
                           <option value="{{$year}}" @selected($year == (request()->year ?? date('Y')))>{{$year}}</option>
                           @endfor
                         </select>

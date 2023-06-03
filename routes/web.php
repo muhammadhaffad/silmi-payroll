@@ -9,6 +9,8 @@ use App\Http\Controllers\MigrateDatabase;
 use App\Http\Controllers\OvertimeRewardInstallmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\Tailor\CompensationSettingController;
+use App\Http\Controllers\Tailor\DefectSettingController;
 use App\Http\Controllers\Tailor\EmployeeController as TailorEmployeeController;
 use App\Http\Controllers\Tailor\EntrySalaryController;
 use App\Http\Controllers\Tailor\SewingController;
@@ -132,23 +134,25 @@ Route::prefix('/gaji-penjahit')->group(function () {
         Route::post('karyawan/create', [TailorEmployeeController::class, 'create'])->name('data-master.karyawan.create');
     });
     Route::prefix('/pengaturan')->group(function () {
-        Route::get('/kompensasi-kasus', function () {
-            return view('gaji-penjahit.kompensasi-kasus.index');
-        });
-        Route::get('/kompensasi-total-jahit', function () {
-            return view('gaji-penjahit.kompensasi-total-jahit.index');
-        });
-        Route::get('/kompensasi-total-jahit/{id}/edit', function ($id) {
-            return view('gaji-penjahit.kompensasi-total-jahit.edit');
-        });
+        Route::get('/kompensasi-kasus', [DefectSettingController::class, 'index'])->name('pengaturan.kompensasi-kasus');
+        Route::put('/kompensasi-kasus/{id}/update', [DefectSettingController::class, 'update'])->name('pengaturan.kompensasi-kasus.update');
+        Route::post('/kompensasi-kasus/create', [DefectSettingController::class, 'create'])->name('pengaturan.kompensasi-kasus.create');
+        Route::post('/kompensasi-kasus/{id}/remove', [DefectSettingController::class, 'remove'])->name('pengaturan.kompensasi-kasus.remove');
+        Route::get('/kompensasi-total-jahit', [CompensationSettingController::class, 'index'])->name('pengaturan.kompensasi-total-jahit');
+        Route::get('/kompensasi-total-jahit/{id}/show', [CompensationSettingController::class, 'show'])->name('pengaturan.kompensasi-total-jahit.lihat');
+        Route::post('/kompensasi-total-jahit/{id}/create', [CompensationSettingController::class, 'create'])->name('pengaturan.kompensasi-total-jahit.tambah');
+        Route::put('/kompensasi-total-jahit/{id}/update', [CompensationSettingController::class, 'update'])->name('pengaturan.kompensasi-total-jahit.update');
+        Route::post('/kompensasi-total-jahit/{id}/remove', [CompensationSettingController::class, 'remove'])->name('pengaturan.kompensasi-total-jahit.remove');
     });
-    Route::get('/entri-data-gaji', [EntrySalaryController::class, 'index']);
-    Route::get('/entri-data-gaji/{id}/entri', function ($id) {
-        return view('gaji-penjahit.entri-data-gaji.create');
-    });
+    Route::get('/entri-data-gaji', [EntrySalaryController::class, 'index'])->name('entri-data-gaji');
+    Route::get('/entri-data-gaji/{id}/entri', [EntrySalaryController::class, 'show'])->name('entri-data-gaji.show');
     Route::post('/entri-data-gaji/{id}/entri/tambah-jahit', [EntrySalaryController::class, 'addSewingTask'])->name('entri-data-gaji.tambah-jahit');
+    Route::put('/entri-data-gaji/{id}/entri/update-jahit', [EntrySalaryController::class, 'updateSewingTask'])->name('entri-data-gaji.update-jahit');
+    Route::post('/entri-data-gaji/{id}/entri/hapus-jahit', [EntrySalaryController::class, 'deleteSewingTask'])->name('entri-data-gaji.hapus-jahit');
     Route::post('/entri-data-gaji/{id}/entri/cacat-jahit', [EntrySalaryController::class, 'addSewingDefect'])->name('entri-data-gaji.cacat-jahit');
     Route::post('/entri-data-gaji/{id}/entri/tambah-kebutuhan-jahit', [EntrySalaryController::class, 'addSewingNeed'])->name('entri-data-gaji.tambah-kebutuhan-jahit');
+    Route::put('/entri-data-gaji/{id}/entri/update-kebutuhan-jahit', [EntrySalaryController::class, 'updateSewingNeed'])->name('entri-data-gaji.update-kebutuhan-jahit');
+    Route::post('/entri-data-gaji/{id}/entri/hapus-kebutuhan-jahit', [EntrySalaryController::class, 'deleteSewingNeed'])->name('entri-data-gaji.hapus-kebutuhan-jahit');
     Route::post('/entri-data-gaji/{id}/entri/simpan-bubut', [EntrySalaryController::class, 'saveTrimming'])->name('entri-data-gaji.simpan-bubut');
     Route::post('/entri-data-gaji/{id}/entri/simpan-cicilan', [EntrySalaryController::class, 'saveInstallment'])->name('entri-data-gaji.simpan-cicilan');
     Route::post('/entri-data-gaji/{id}/entri/simpan-infaq', [EntrySalaryController::class, 'saveInfaq'])->name('entri-data-gaji.simpan-infaq');

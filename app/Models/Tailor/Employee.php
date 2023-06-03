@@ -41,4 +41,8 @@ class Employee extends Model
     {
         return $this->hasOne(SewingCompensation::class);
     }
+    public function sewingCompensationRules()
+    {
+        return $this->hasMany(SewingCompensationRule::class);
+    }
 }
