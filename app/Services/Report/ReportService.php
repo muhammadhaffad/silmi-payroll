@@ -65,7 +65,8 @@ class ReportService
         if ($count > 0) {
             $directorNames = Report::query()->where('tanggal', date('Y-m-01'))->where('devisi', 'DIREKSI')->get('nama')->pluck('nama');
             $namesTobeRemoved = $directorNames->diff($directors->pluck('nama'));
-            $reportRemoved = Report::whereIn('nip', $namesTobeRemoved);
+            $reportRemoved = Report::whereIn('nama', $namesTobeRemoved);
+            $reportRemoved->delete();
             foreach ($directors as $director) {
                 Report::updateOrCreate(['nama' => $director->nama],[
                     'tanggal' => date('Y-m-01'),
@@ -83,6 +84,7 @@ class ReportService
                 $nips = Report::query()->where('tanggal', date('Y-m-01'))->where('devisi', $devision->nama)->get('nip')->pluck('nip');
                 $nipsToBeRemoved = $nips->diff($devision->employees->pluck('nip'));
                 $reportRemoved = Report::whereIn('nip', $nipsToBeRemoved);
+                $reportRemoved->delete();
                 foreach ($devision->employees as $employee) {
                     $tunjanganTidakTetap = 0;
                     if (!$employee->is_khusus) {

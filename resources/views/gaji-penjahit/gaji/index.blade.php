@@ -9,9 +9,9 @@
                 <div class="d-flex">
                     <div class="form-group mr-2">
                         <label for="year">Tahun:</label>
-                        <select class="form-control" name="year" id="year">
+                        <select class="form-control" name="tahun" id="year">
                           @for ($year = 2023; $year <= (int) date('Y'); $year++)
-                          <option value="{{$year}}" @selected($year == (request()->year ?? date('Y')))>{{$year}}</option>
+                          <option value="{{$year}}" @selected($year == (request()->tahun ?? date('Y')))>{{$year}}</option>
                           @endfor
                         </select>
                     </div>
@@ -20,9 +20,9 @@
                     @endphp
                     <div class="form-group">
                         <label for="month">Bulan:</label>
-                        <select class="form-control" name="month" id="month">
+                        <select class="form-control" name="bulan" id="month">
                           @foreach ($months as $key => $month)
-                          <option value="{{$key+1}}" @selected($key+1 == (request()->month ?? date('m')))>{{$month}}</option>
+                          <option value="{{$key+1}}" @selected($key+1 == (request()->bulan ?? date('m')))>{{$month}}</option>
                           @endforeach
                         </select>
                     </div>
@@ -50,22 +50,23 @@
                     </thead>
 
                     <tbody>
+                        @forelse ($employees ?? [] as $employee)
                         <tr>
-                            <td>1</td>
+                            <td>{{$loop->iteration}}</td>
                             <td>
-                                AZIZAH
+                                {{$employee->nama}}
                             </td>
-                            <td>{{Helper::rupiah(2000000)}}</td>
-                            <td>10%</td>
-                            <td>{{Helper::rupiah(200000)}}</td>
-                            <td>{{Helper::rupiah(100000)}}</td>
-                            <td>1%</td>
-                            <td>5%</td>
-                            <td>{{Helper::rupiah(100000)}}</td>
-                            <td>{{Helper::rupiah(10000)}}</td>
-                            <td>{{Helper::rupiah(10000)}}</td>
-                            <td>{{Helper::rupiah(10000)}}</td>
-                            <td>{{Helper::rupiah(2200000)}}</td>
+                            <td>{{Helper::rupiah($employee->total_jahit)}}</td>
+                            <td>{{$employee->kompensasi_persen}}%</td>
+                            <td>{{Helper::rupiah($employee->kompensasi)}}</td>
+                            <td>{{Helper::rupiah($employee->total_kebutuhan)}}</td>
+                            <td>{{$employee->cacat_persen}}%</td>
+                            <td>{{$employee->kompensasi_cacat_persen}}%</td>
+                            <td>{{Helper::rupiah($employee->kompensasi_cacat)}}</td>
+                            <td>{{Helper::rupiah($employee->cicilan)}}</td>
+                            <td>{{Helper::rupiah($employee->infaq)}}</td>
+                            <td>{{Helper::rupiah($employee->bubut)}}</td>
+                            <td>{{Helper::rupiah($employee->gaji_final)}}</td>
                             <td class="d-flex">
                                 <button class="btn btn-primary btn-xs btn-action mr-1 text-nowrap" title="Buka sebagai gambar" data-toggle="modal" data-target="#editDataJahit-1">
                                     <i class="fas fa-image">
@@ -76,6 +77,9 @@
                                 </button>
                             </td>
                         </tr>
+                        @empty
+                            
+                        @endforelse
                     </tbody>
                 </table>
             </div>

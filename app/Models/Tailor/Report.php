@@ -12,4 +12,8 @@ class Report extends Model
 
     protected $connection = 'mysql_tailor';
     protected $guarded = ['id'];
+    protected $casts = [
+        'rincian_jahit' => 'array',
+        'rincian_kebutuhan_jahit' => 'array'
+    ];
 }

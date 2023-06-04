@@ -13,6 +13,8 @@ use App\Http\Controllers\Tailor\CompensationSettingController;
 use App\Http\Controllers\Tailor\DefectSettingController;
 use App\Http\Controllers\Tailor\EmployeeController as TailorEmployeeController;
 use App\Http\Controllers\Tailor\EntrySalaryController;
+use App\Http\Controllers\Tailor\ReportController as TailorReportController;
+use App\Http\Controllers\Tailor\SalaryController as TailorSalaryController;
 use App\Http\Controllers\Tailor\SewingController;
 use App\Http\Controllers\Tailor\SewingSupplyController;
 use App\Http\Controllers\TestExcelController;
@@ -156,12 +158,11 @@ Route::prefix('/gaji-penjahit')->group(function () {
     Route::post('/entri-data-gaji/{id}/entri/simpan-bubut', [EntrySalaryController::class, 'saveTrimming'])->name('entri-data-gaji.simpan-bubut');
     Route::post('/entri-data-gaji/{id}/entri/simpan-cicilan', [EntrySalaryController::class, 'saveInstallment'])->name('entri-data-gaji.simpan-cicilan');
     Route::post('/entri-data-gaji/{id}/entri/simpan-infaq', [EntrySalaryController::class, 'saveInfaq'])->name('entri-data-gaji.simpan-infaq');
-    Route::get('/gaji', function () {
-        return view('gaji-penjahit.gaji.index');
-    }); 
+    Route::get('/gaji', [TailorSalaryController::class, 'index']); 
     Route::get('/laporan', function () {
         return view('gaji-penjahit.laporan.index');
     }); 
+    Route::get('/laporan/buat-laporan', [TailorReportController::class, 'makeReport'])->name('laporan.buat-laporan');
 });
 Route::get('test-export', [TestExcelController::class, 'export']);
 Route::get('migrate', [MigrateDatabase::class, 'migrate']);

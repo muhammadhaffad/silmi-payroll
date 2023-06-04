@@ -49,10 +49,10 @@
             <div class="d-flex">
                 <div class="form-group w-100 mr-2">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">Rp</span>
-                        </div>
                         <input form="update-rule-{{$rule->id}}" required name="min_cacat_persen" value="{{$rule->min_cacat_persen}}" type="number" min="0" class="form-control" placeholder="Masukan jumlah minimal">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group pr-2"> 
@@ -62,7 +62,7 @@
                     </select>
                 </div>
                 <div class="form-group pr-2">
-                    <div class="p-2 text-nowrap">JUMLAH</div>
+                    <div class="p-2 text-nowrap">KASUS</div>
                 </div>
                 <div class="form-group pr-2">
                     <select form="update-rule-{{$rule->id}}" required name="inclusive_maks" class="form-control w-auto selectpicker">
@@ -72,10 +72,10 @@
                 </div>
                 <div class="form-group w-100 mr-2">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">Rp</span>
-                        </div>
                         <input form="update-rule-{{$rule->id}}" required name="maks_cacat_persen" value="{{$rule->maks_cacat_persen}}" type="number" min="0" class="form-control" placeholder="Masukan jumlah maksimal">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
                     </div>
                 </div>
                 <span class="mr-2 pt-2">=</span>

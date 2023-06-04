@@ -26,7 +26,7 @@ return new class extends Migration
             $table->double('perjam')->default(0);
             $table->double('total_jam')->default(0);
             $table->bigInteger('total')->default(0);
-            $table->json('rincian_keahlian')->default(0);
+            $table->json('rincian_keahlian')->nullable();
             $table->bigInteger('tunjangan_keahlian')->default(0);
             $table->bigInteger('tunjangan_kepala_keluarga')->default(0);
             $table->bigInteger('tunjangan_masa_kerja')->default(0);
