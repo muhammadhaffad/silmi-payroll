@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccumulationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebtController;
 use App\Http\Controllers\DirectorController;
@@ -111,9 +112,7 @@ Route::prefix('/gaji-pegawai')->group(function () {
     Route::post('gaji/print/{nip}', [SalaryController::class, 'printSalaryPDF']);
     Route::post('gaji/gambar/{nip}', [SalaryController::class, 'printSalaryImage']);
     Route::post('gaji-perjam/gambar/{nip}', [SalaryController::class, 'printLog']);
-    Route::get('akumulasi-gaji', function () {
-        return view('gaji-pegawai.akumulasi.index');
-    });
+    Route::get('akumulasi-gaji', [AccumulationController::class, 'index']);
     Route::get('laporan', [ReportController::class, 'index']);
     Route::post('laporan/print-full', [ReportController::class, 'printFullReport']);
     Route::get('laporan/make-report', [ReportController::class, 'makeReport']);
@@ -159,10 +158,12 @@ Route::prefix('/gaji-penjahit')->group(function () {
     Route::post('/entri-data-gaji/{id}/entri/simpan-cicilan', [EntrySalaryController::class, 'saveInstallment'])->name('entri-data-gaji.simpan-cicilan');
     Route::post('/entri-data-gaji/{id}/entri/simpan-infaq', [EntrySalaryController::class, 'saveInfaq'])->name('entri-data-gaji.simpan-infaq');
     Route::get('/gaji', [TailorSalaryController::class, 'index']); 
+    Route::post('/gaji/penjahit/{id}/pdf', [TailorSalaryController::class, 'getSalaryPdf'])->name('gaji-penjahit.pdf');
     Route::get('/laporan', function () {
         return view('gaji-penjahit.laporan.index');
     }); 
-    Route::get('/laporan/buat-laporan', [TailorReportController::class, 'makeReport'])->name('laporan.buat-laporan');
+    Route::post('/laporan/buat-laporan', [TailorReportController::class, 'makeReport'])->name('laporan.buat-laporan');
+    Route::post('/laporan/get-laporan', [TailorReportController::class, 'getReport'])->name('laporan.get-laporan');
 });
 Route::get('test-export', [TestExcelController::class, 'export']);
 Route::get('migrate', [MigrateDatabase::class, 'migrate']);

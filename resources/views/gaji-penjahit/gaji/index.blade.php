@@ -68,13 +68,23 @@
                             <td>{{Helper::rupiah($employee->bubut)}}</td>
                             <td>{{Helper::rupiah($employee->gaji_final)}}</td>
                             <td class="d-flex">
-                                <button class="btn btn-primary btn-xs btn-action mr-1 text-nowrap" title="Buka sebagai gambar" data-toggle="modal" data-target="#editDataJahit-1">
-                                    <i class="fas fa-image">
-                                    </i> Gaji
-                                </button>
-                                <button class="btn btn-danger btn-xs delete-data mr-1 text-nowrap" title="Buka sebagai file">
-                                    <i class="fas fa-file-pdf"></i> Gaji
-                                </button>
+                                <form target="_blank" action="{{route('gaji-penjahit.pdf', ['id' => $employee->employee_id])}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="tahun" value="{{request()->tahun}}">
+                                    <input type="hidden" name="bulan" value="{{request()->bulan}}">
+                                    <button class="btn btn-primary btn-xs btn-action mr-1 text-nowrap" title="Buka sebagai gambar" data-toggle="modal" data-target="#editDataJahit-1">
+                                        <i class="fas fa-image">
+                                        </i> Gaji
+                                    </button>
+                                </form>
+                                <form target="_blank" action="{{route('gaji-penjahit.pdf', ['id' => $employee->id])}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="tahun" value="{{request()->tahun}}">
+                                    <input type="hidden" name="bulan" value="{{request()->bulan}}">
+                                    <button class="btn btn-danger btn-xs delete-data mr-1 text-nowrap" title="Buka sebagai file">
+                                        <i class="fas fa-file-pdf"></i> Gaji
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @empty

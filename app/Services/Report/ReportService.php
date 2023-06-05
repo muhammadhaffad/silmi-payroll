@@ -209,13 +209,13 @@ class ReportService
             return [
                 'code' => 200,
                 'message' => 'Berhasil mendapatkan data',
-                'data' => Report::select('devisi', DB::raw('MONTH(tanggal) AS bulan'), DB::raw('SUM(take_home) AS jumlah'))->whereYear('tanggal', $year)->groupBy(DB::raw('MONTH(tanggal)'), 'devisi')->get()
+                'data' => Report::select('devisi', DB::raw('MONTH(tanggal) AS bulan'), DB::raw('SUM(take_home) AS jumlah'))->whereYear('tanggal', $year)->groupBy(DB::raw('MONTH(tanggal)'), 'devisi')->get()->groupBy('devisi')
             ];
         } else {
             return [
                 'code' => 200,
                 'message' => 'Berhasil mendapatkan data',
-                'data' => Report::select(DB::raw('SUM(take_home) AS jumlah'))->whereYear('tanggal', $year)->groupBy('devisi')->get()
+                'data' => Report::select(DB::raw('SUM(take_home) AS jumlah'))->whereYear('tanggal', $year)->groupBy('devisi')->get()->groupBy('devisi')
             ];
         }
     }

@@ -44,16 +44,23 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @php
+                                                    $allTotal = 0;
+                                                @endphp
+                                                @foreach ($reports as $devision => $report)
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>Direksi</td>
-                                                    <td>2023</td>
-                                                    <td>{{ Helper::rupiah(1500000) }}</td>
+                                                    <td>{{$loop->iteration}}</td>
+                                                    <td>{{$devision}}</td>
+                                                    <td>{{request()->tahun}}</td>
+                                                    <td>{{ Helper::rupiah($report->sum('jumlah')) }}</td>
+                                                    @php
+                                                        $allTotal += $report->sum('jumlah');
+                                                    @endphp
                                                     <td>
-                                                        <a href="" class=" btn btn-success btn-xs btn-action mr-1" data-toggle="modal" data-target="#devisi-direksi">
+                                                        <a href="" class="btn btn-success btn-xs btn-action mr-1" data-toggle="modal" data-target="#devisi-{{$devision}}">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
-                                                        <div class="modal fade" id="devisi-direksi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal fade" id="devisi-{{$devision}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -66,7 +73,7 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <div class="">
-                                                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                                            <table class="table table-bordered" width="100%" cellspacing="0">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>No</th>
@@ -74,28 +81,17 @@
                                                                                         <th>Total Gaji</th>
                                                                                     </tr>
                                                                                 </thead>
+                                                                                @php
+                                                                                    $bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                                                                @endphp
                                                                                 <tbody>
+                                                                                    @foreach ($report as $row)
                                                                                     <tr>
-                                                                                        <td>1</td>
-                                                                                        <td>Januari</td>
-                                                                                        <td>{{ Helper::rupiah(20000000) }}</td>
+                                                                                        <td>{{$loop->iteration}}</td>
+                                                                                        <td>{{$bulan[$row->bulan-1]}}</td>
+                                                                                        <td>{{ Helper::rupiah($row->jumlah) }}</td>
                                                                                     </tr>
-                                                                                    <tr>
-                                                                                        <td>2</td>
-                                                                                        <td>Februari</td>
-                                                                                        <td>{{ Helper::rupiah(20000000) }}</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>3</td>
-                                                                                        <td>Maret</td>
-                                                                                        <td>{{ Helper::rupiah(20000000) }}</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td colspan="2">Total</td>
-                                                                                        <td>
-                                                                                            {{ Helper::rupiah(60000000) }}
-                                                                                        </td>
-                                                                                    </tr>
+                                                                                    @endforeach
                                                                                 </tbody>
                                                                             </table>
                                                                         </div>
@@ -105,71 +101,11 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>IT Support</td>
-                                                    <td>2023</td>
-                                                    <td>{{ Helper::rupiah(20000000) }}</td>
-                                                    <td>
-                                                        <a href="" class=" btn btn-success btn-xs btn-action mr-1" data-toggle="modal" data-target="#devisi-1">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                        <div class="modal fade" id="devisi-1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLabel">
-                                                                            Detail Akumulasi Devisi Direksi</h5>
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="">
-                                                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>No</th>
-                                                                                        <th>Bulan</th>
-                                                                                        <th>Total Gaji</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td>1</td>
-                                                                                        <td>Januari</td>
-                                                                                        <td>{{ Helper::rupiah(20000000) }}</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>2</td>
-                                                                                        <td>Februari</td>
-                                                                                        <td>{{ Helper::rupiah(20000000) }}</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>3</td>
-                                                                                        <td>Maret</td>
-                                                                                        <td>{{ Helper::rupiah(20000000) }}</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td colspan="2">Total</td>
-                                                                                        <td>
-                                                                                            {{ Helper::rupiah(60000000) }}
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                @endforeach
                                                 <tr class="bg-danger text-white">
                                                     <td colspan="3">Total Keseluruhan</td>
                                                     <td class="text-right" colspan="1">
-                                                        {{ Helper::rupiah(40000000) }}
+                                                        {{ Helper::rupiah($allTotal) }}
                                                     </td>
                                                 </tr>
                                             </tbody>

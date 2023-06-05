@@ -12,4 +12,14 @@ class SewingTask extends Model
 
     protected $connection = 'mysql_tailor';
     protected $guarded = ['id'];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    public function sewing() 
+    {
+        return $this->belongsTo(Sewing::class);
+    }
 }

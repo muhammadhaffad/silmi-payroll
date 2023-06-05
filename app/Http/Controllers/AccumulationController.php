@@ -15,6 +15,6 @@ class AccumulationController extends Controller
     public function index(Request $request)
     {
         $result = $this->reportService->getAnnualDevisionSalary($request->tahun ?? date('Y'), true);
-        return view('gaji-pegawai.akumulasi.index', $result['data']);
+        return view('gaji-pegawai.akumulasi.index', ['reports' => $result['data']]);
     }
 }
