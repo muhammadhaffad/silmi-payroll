@@ -60,13 +60,17 @@ class TailorSalaryExport implements FromCollection, WithStyles
         $sheet->getStyle('D3')->getFont()->setBold(true);
         $totalNominal = 0;
         $totalQty = 0;
-        foreach ($this->data->rincian_jahit as $key => $rincian) {
-            $sheet->setCellValue(sprintf('A%u', $key + 10), $rincian['sewing']['nama'])
-                ->setCellValue(sprintf('B%u', $key + 10), Helper::rupiah($rincian['sewing']['total']))
-                ->setCellValue(sprintf('C%u', $key + 10), $rincian['qty'])
-                ->setCellValue(sprintf('D%u', $key + 10), Helper::rupiah((int)$rincian['sewing']['total']*(int)$rincian['qty']));
-            $totalNominal += (int)$rincian['sewing']['total']*(int)$rincian['qty'];
-            $totalQty += (int)$rincian['qty'];
+        if (empty($this->data->rincian_jahit)) {
+            $key = 0;
+        } else {
+            foreach ($this->data->rincian_jahit as $key => $rincian) {
+                $sheet->setCellValue(sprintf('A%u', $key + 10), $rincian['sewing']['nama'])
+                    ->setCellValue(sprintf('B%u', $key + 10), Helper::rupiah($rincian['sewing']['total']))
+                    ->setCellValue(sprintf('C%u', $key + 10), $rincian['qty'])
+                    ->setCellValue(sprintf('D%u', $key + 10), Helper::rupiah((int)$rincian['sewing']['total']*(int)$rincian['qty']));
+                $totalNominal += (int)$rincian['sewing']['total']*(int)$rincian['qty'];
+                $totalQty += (int)$rincian['qty'];
+            }
         }
         $sheet->getStyle('A9:D9')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A9:D9')->getFont()->setBold(true);

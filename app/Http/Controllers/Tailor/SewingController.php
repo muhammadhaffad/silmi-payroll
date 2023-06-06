@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Tailor;
 
 use App\Http\Controllers\Controller;
+use App\Imports\SewingDataMasterImport;
 use App\Services\TailorSewing\SewingService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SewingController extends Controller
 {
@@ -48,5 +50,9 @@ class SewingController extends Controller
         } else {
             return redirect()->back()->with('success', $result['message']);
         }
+    }
+    public function import(Request $request)
+    {
+        Excel::import(new SewingDataMasterImport, $request->file('file'));
     }
 }

@@ -126,6 +126,7 @@ Route::prefix('/gaji-penjahit')->group(function () {
         Route::post('jahit/{id}/delete', [SewingController::class, 'delete'])->name('data-master.jahit.delete');
         Route::put('jahit/{id}/update', [SewingController::class, 'update'])->name('data-master.jahit.update');
         Route::post('jahit/create', [SewingController::class, 'create'])->name('data-master.jahit.create');
+        Route::post('jahit/import', [SewingController::class, 'import'])->name('data-master.jahit.import');
         Route::get('kebutuhan-jahit', [SewingSupplyController::class, 'index'])->name('data-master.kebutuhan-jahit');
         Route::post('kebutuhan-jahit/{id}/delete', [SewingSupplyController::class, 'delete'])->name('data-master.kebutuhan-jahit.delete');
         Route::post('kebutuhan-jahit/create', [SewingSupplyController::class, 'create'])->name('data-master.kebutuhan-jahit.create');
@@ -159,6 +160,7 @@ Route::prefix('/gaji-penjahit')->group(function () {
     Route::post('/entri-data-gaji/{id}/entri/simpan-infaq', [EntrySalaryController::class, 'saveInfaq'])->name('entri-data-gaji.simpan-infaq');
     Route::get('/gaji', [TailorSalaryController::class, 'index']); 
     Route::post('/gaji/penjahit/{id}/pdf', [TailorSalaryController::class, 'getSalaryPdf'])->name('gaji-penjahit.pdf');
+    Route::post('/gaji/penjahit/{id}/jpg', [TailorSalaryController::class, 'getSalaryJpg'])->name('gaji-penjahit.jpg');
     Route::get('/laporan', function () {
         return view('gaji-penjahit.laporan.index');
     }); 

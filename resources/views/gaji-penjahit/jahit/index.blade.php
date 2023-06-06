@@ -1,6 +1,36 @@
 @extends('gaji-penjahit.layout.app', ['title' => 'Data Jahit'])
 @section('content')
-    <h3>Data Jahit</h3>
+    <div class="d-flex mb-4 justify-content-between">
+        <h3>Data Jahit</h3>
+        <button type="submit" data-toggle="modal" data-target="#upload-file" class="btn btn-primary text-nowrap">Upload File Excel</button>
+        <div class="modal fade" id="upload-file" tabindex="-1" role="dialog" aria-hidden="true">
+            <form action="{{route('data-master.jahit.import')}}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Upload File</h5>
+                            <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group w-100 pr-2">
+                                <label for="inputFile">File Excel</label>
+                                <input required name="file" type="file" class="form-control" id="inputFile" placeholder="Masukan nama">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="card">
         <form action="{{route('data-master.jahit.create')}}" method="post">
         <div class="card-header d-flex">

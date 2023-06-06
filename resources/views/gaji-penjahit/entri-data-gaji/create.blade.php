@@ -64,11 +64,11 @@
             <form action="{{route('entri-data-gaji.tambah-jahit', ['id' => $employee->id])}}" method="post">
             @csrf
             <div class="d-flex w-100">
-                <div class="form-group w-100 mr-2 mb-0">
-                    <select name="sewing_id" class="selectpicker w-100" data-live-search="true" data-style="border-secondary">
+                <div class="form-group w-100 mr-2 mb-0" id="container-select">
+                    <select name="sewing_id" class="selectpicker w-100" data-container="body" data-live-search="true" data-style="border-secondary">
                         <option value="" selected disabled>Pilih Jahit</option>
-                        @foreach (App\Models\Tailor\Sewing::all() as $sewing)
-                        <option value="{{$sewing->id}}">{{$sewing->nama}} - {{Helper::rupiah($sewing->total)}}</option>
+                        @foreach (App\Models\Tailor\Sewing::get() as $sewing)
+                            <option value="{{$sewing->id}}">{{$sewing->nama}} - {{Helper::rupiah($sewing->total)}}</option>
                         @endforeach
                     </select>
                 </div>

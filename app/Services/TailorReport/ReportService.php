@@ -20,27 +20,27 @@ class ReportService
                     'employee_id' => $employee->id,
                     'nama' => $employee->nama,
                     'rincian_jahit' => $employee->sewingTasks->toArray(),
-                    'total_jahit' => $employee->sewing_tasks_sum_total ?? 0,
+                    'total_jahit' => ($employee->sewing_tasks_sum_total ?? 0),
                     'kompensasi_persen' => $employee?->sewingCompensation->kompensasi_persen ?? 0,
                     'kompensasi_jahit' => ($employee?->sewingCompensation->kompensasi_persen ?? 0),
-                    'kompensasi' => (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
-                    'total_gaji_after_kompensasi' => $employee->sewing_tasks_sum_total 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
+                    'kompensasi' => (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
+                    'total_gaji_after_kompensasi' => ($employee->sewing_tasks_sum_total ?? 0) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
                     'rincian_kebutuhan_jahit' => $employee->sewingNeeds?->toArray() ?? [],
                     'total_kebutuhan' => ($employee->sewing_needs_sum_total ?? 0),
-                    'total_gaji_after_kebutuhan' => $employee->sewing_tasks_sum_total 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100)
+                    'total_gaji_after_kebutuhan' => ($employee->sewing_tasks_sum_total ?? 0) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100)
                         - ($employee->sewing_needs_sum_total ?? 0),
                     'cacat_persen' => ($employee?->sewingDefect->cacat_persen ?? 0),
                     'kompensasi_cacat_persen' => ($employee?->sewingDefect->kompensasi_persen ?? 0),
-                    'kompensasi_cacat' => (int)($employee->sewing_tasks_sum_total * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100),
+                    'kompensasi_cacat' => (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100),
                     'cicilan' => $employee->installment->jumlah,
                     'infaq' => $employee->infaq->jumlah,
                     'bubut' => $employee->trimming->jumlah,
-                    'gaji_final' => $employee->sewing_tasks_sum_total 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100) 
+                    'gaji_final' => ($employee->sewing_tasks_sum_total ?? 0) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100) 
                         - ($employee->sewing_needs_sum_total ?? 0) 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100) 
                         + $employee->trimming->jumlah 
                         - $employee->infaq->jumlah 
                         - $employee->installment->jumlah
@@ -53,27 +53,27 @@ class ReportService
                     'employee_id' => $employee->id,
                     'nama' => $employee->nama,
                     'rincian_jahit' => $employee->sewingTasks->toArray(),
-                    'total_jahit' => $employee->sewing_tasks_sum_total,
+                    'total_jahit' => ($employee->sewing_tasks_sum_total ?? 0),
                     'kompensasi_persen' => $employee?->sewingCompensation->kompensasi_persen ?? 0,
                     'kompensasi_jahit' => ($employee?->sewingCompensation->kompensasi_persen ?? 0),
-                    'kompensasi' => (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
-                    'total_gaji_after_kompensasi' => $employee->sewing_tasks_sum_total 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
+                    'kompensasi' => (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
+                    'total_gaji_after_kompensasi' => ($employee->sewing_tasks_sum_total ?? 0) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100),
                     'rincian_kebutuhan_jahit' => $employee->sewingNeeds?->toArray() ?? [],
                     'total_kebutuhan' => ($employee->sewing_needs_sum_total ?? 0),
-                    'total_gaji_after_kebutuhan' => $employee->sewing_tasks_sum_total 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100)
+                    'total_gaji_after_kebutuhan' => ($employee->sewing_tasks_sum_total ?? 0) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100)
                         - ($employee->sewing_needs_sum_total ?? 0),
                     'cacat_persen' => ($employee?->sewingDefect->cacat_persen ?? 0),
                     'kompensasi_cacat_persen' => ($employee?->sewingDefect->kompensasi_persen ?? 0),
-                    'kompensasi_cacat' => (int)($employee->sewing_tasks_sum_total * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100),
+                    'kompensasi_cacat' => (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100),
                     'cicilan' => $employee->installment->jumlah,
                     'infaq' => $employee->infaq->jumlah,
                     'bubut' => $employee->trimming->jumlah,
-                    'gaji_final' => $employee->sewing_tasks_sum_total 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100) 
+                    'gaji_final' => ($employee->sewing_tasks_sum_total ?? 0) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingCompensation->kompensasi_persen ?? 0) / 100) 
                         - ($employee->sewing_needs_sum_total ?? 0) 
-                        + (int)($employee->sewing_tasks_sum_total * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100) 
+                        + (int)(($employee->sewing_tasks_sum_total ?? 0) * ($employee?->sewingDefect->kompensasi_persen ?? 0) / 100) 
                         + $employee->trimming->jumlah 
                         - $employee->infaq->jumlah 
                         - $employee->installment->jumlah

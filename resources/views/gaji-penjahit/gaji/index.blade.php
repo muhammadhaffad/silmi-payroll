@@ -68,7 +68,7 @@
                             <td>{{Helper::rupiah($employee->bubut)}}</td>
                             <td>{{Helper::rupiah($employee->gaji_final)}}</td>
                             <td class="d-flex">
-                                <form target="_blank" action="{{route('gaji-penjahit.pdf', ['id' => $employee->employee_id])}}" method="post">
+                                <form target="_blank" action="{{route('gaji-penjahit.jpg', ['id' => $employee->employee_id])}}" method="post">
                                     @csrf
                                     <input type="hidden" name="tahun" value="{{request()->tahun}}">
                                     <input type="hidden" name="bulan" value="{{request()->bulan}}">
