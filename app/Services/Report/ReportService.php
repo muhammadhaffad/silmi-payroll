@@ -65,10 +65,10 @@ class ReportService
         if ($count > 0) {
             $directorNames = Report::query()->where('tanggal', date('Y-m-01'))->where('devisi', 'DIREKSI')->get('nama')->pluck('nama');
             $namesTobeRemoved = $directorNames->diff($directors->pluck('nama'));
-            $reportRemoved = Report::whereIn('nama', $namesTobeRemoved);
+            $reportRemoved = Report::whereIn('nama', $namesTobeRemoved)->where('tanggal', date('Y-m-01'));
             $reportRemoved->delete();
             foreach ($directors as $director) {
-                Report::updateOrCreate(['nama' => $director->nama],[
+                Report::updateOrCreate(['nama' => $director->nama, 'tanggal' => date('Y-m-01')],[
                     'tanggal' => date('Y-m-01'),
                     'devisi' => 'DIREKSI',
                     'nip' => 0,
@@ -83,7 +83,7 @@ class ReportService
             foreach ($devisions as $devision) {
                 $nips = Report::query()->where('tanggal', date('Y-m-01'))->where('devisi', $devision->nama)->get('nip')->pluck('nip');
                 $nipsToBeRemoved = $nips->diff($devision->employees->pluck('nip'));
-                $reportRemoved = Report::whereIn('nip', $nipsToBeRemoved);
+                $reportRemoved = Report::whereIn('nip', $nipsToBeRemoved)->where('tanggal', date('Y-m-01'));
                 $reportRemoved->delete();
                 foreach ($devision->employees as $employee) {
                     $tunjanganTidakTetap = 0;
@@ -93,7 +93,7 @@ class ReportService
                         $tunjanganTidakTetap = $employee->variableAllowance->gaji_pokok + $employee->variableAllowance->tunjangan_jabatan;
                     }
                     $tunjanganTetap = $employee->fixedAllowance?->total;
-                    Report::updateOrCreate([ 'nip' => $employee->nip ],
+                    Report::updateOrCreate(['nip' => $employee->nip, 'tanggal' => date('Y-m-01')],
                     [
                         'tanggal' => date('Y-m-01'),
                         'devisi' => $devision->nama,
